@@ -7,4 +7,14 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Memory\" />
+    <Folder Include="Core\" />
+    <Folder Include="Controllers\" />
+    <Folder Include="Tools\" />
+    <Folder Include="Python\" />
+    <Folder Include="Services\" />
+    <Folder Include="UserSettings\" />
+  </ItemGroup>
+
 </Project>

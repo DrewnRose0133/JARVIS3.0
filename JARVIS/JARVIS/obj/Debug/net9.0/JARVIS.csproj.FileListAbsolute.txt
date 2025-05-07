@@ -1,0 +1,15 @@
+C:\Users\Drew\Desktop\Repos\JARVIS3.0\JARVIS\JARVIS\bin\Debug\net9.0\JARVIS.exe
+C:\Users\Drew\Desktop\Repos\JARVIS3.0\JARVIS\JARVIS\bin\Debug\net9.0\JARVIS.deps.json
+C:\Users\Drew\Desktop\Repos\JARVIS3.0\JARVIS\JARVIS\bin\Debug\net9.0\JARVIS.runtimeconfig.json
+C:\Users\Drew\Desktop\Repos\JARVIS3.0\JARVIS\JARVIS\bin\Debug\net9.0\JARVIS.dll
+C:\Users\Drew\Desktop\Repos\JARVIS3.0\JARVIS\JARVIS\bin\Debug\net9.0\JARVIS.pdb
+C:\Users\Drew\Desktop\Repos\JARVIS3.0\JARVIS\JARVIS\obj\Debug\net9.0\JARVIS.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Drew\Desktop\Repos\JARVIS3.0\JARVIS\JARVIS\obj\Debug\net9.0\JARVIS.AssemblyInfoInputs.cache
+C:\Users\Drew\Desktop\Repos\JARVIS3.0\JARVIS\JARVIS\obj\Debug\net9.0\JARVIS.AssemblyInfo.cs
+C:\Users\Drew\Desktop\Repos\JARVIS3.0\JARVIS\JARVIS\obj\Debug\net9.0\JARVIS.csproj.CoreCompileInputs.cache
+C:\Users\Drew\Desktop\Repos\JARVIS3.0\JARVIS\JARVIS\obj\Debug\net9.0\JARVIS.sourcelink.json
+C:\Users\Drew\Desktop\Repos\JARVIS3.0\JARVIS\JARVIS\obj\Debug\net9.0\JARVIS.dll
+C:\Users\Drew\Desktop\Repos\JARVIS3.0\JARVIS\JARVIS\obj\Debug\net9.0\refint\JARVIS.dll
+C:\Users\Drew\Desktop\Repos\JARVIS3.0\JARVIS\JARVIS\obj\Debug\net9.0\JARVIS.pdb
+C:\Users\Drew\Desktop\Repos\JARVIS3.0\JARVIS\JARVIS\obj\Debug\net9.0\JARVIS.genruntimeconfig.cache
+C:\Users\Drew\Desktop\Repos\JARVIS3.0\JARVIS\JARVIS\obj\Debug\net9.0\ref\JARVIS.dll
