@@ -8,17 +8,30 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Memory\" />
-    <Folder Include="Core\" />
-    <Folder Include="Controllers\" />
     <Folder Include="Tools\" />
-    <Folder Include="Python\" />
-    <Folder Include="Services\" />
-    <Folder Include="UserSettings\" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Fleck" Version="1.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.4" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.4" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.4" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="9.0.4" />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="9.0.4" />
+    <PackageReference Include="Microsoft.Extensions.Options.DataAnnotations" Version="9.0.4" />
     <PackageReference Include="NAudio" Version="2.2.1" />
+    <PackageReference Include="SpotifyAPI.Web" Version="7.2.1" />
+    <PackageReference Include="SpotifyAPI.Web.Auth" Version="7.2.1" />
+    <PackageReference Include="System.Diagnostics.PerformanceCounter" Version="10.0.0-preview.3.25171.5" />
+    <PackageReference Include="System.Reactive" Version="6.0.1" />
+    <PackageReference Include="System.Speech" Version="10.0.0-preview.3.25171.5" />
+    <PackageReference Include="System.Windows.Extensions" Version="10.0.0-preview.3.25171.5" />
   </ItemGroup>
+
+	<ItemGroup>
+		<None Update="appsettings.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
 
 </Project>
