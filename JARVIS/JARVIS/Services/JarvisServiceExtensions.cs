@@ -11,6 +11,8 @@ using System.Speech.Synthesis;
 using System.Speech.Recognition;
 using JARVIS.Python;
 using JARVIS.Devices.Interfaces;
+using JARVIS.Devices;
+using System.Configuration;
 
 namespace JARVIS.Services
 {
@@ -27,6 +29,20 @@ namespace JARVIS.Services
                 .Validate(s => !string.IsNullOrWhiteSpace(s.ModelId), "ModelId is required")
                 .ValidateOnStart();
 
+            services
+                .AddOptions<WeatherSettings>()
+                .Bind(config.GetSection("OpenWeather"))
+                .ValidateDataAnnotations()
+                .ValidateOnStart();
+
+            services.AddHttpClient<WeatherController>((sp, client) =>
+            {
+                var ws = sp.GetRequiredService<IOptions<WeatherSettings>>().Value;
+                client.BaseAddress = new Uri(ws.BaseUrl.EndsWith("/")
+                    ? ws.BaseUrl
+                    : ws.BaseUrl + "/");
+            });
+
             // Bind general settings
             services.Configure<AppSettings>(config);
 
@@ -39,7 +55,16 @@ namespace JARVIS.Services
 
             // Register core singleton services
             services.AddSingleton<PersonaController>();
-            
+
+            services.AddSingleton<VisualizerSocketServer>(sp =>
+            {
+                var cfg = sp.GetRequiredService<IConfiguration>();
+                // read these from your appsettings.json under a "Visualizer" section:
+                var address = cfg["Visualizer:ListenAddress"] ?? "ws://0.0.0.0";
+                var port = int.TryParse(cfg["Visualizer:Port"], out var p) ? p : 8181;
+                return new VisualizerSocketServer();
+            });
+
             services.AddSingleton<AudioEngine>();
             services.AddSingleton<SmartHomeController>();
             services.AddSingleton<MemoryEngine>();
@@ -49,7 +74,8 @@ namespace JARVIS.Services
             services.AddSingleton<VoiceStyleController>();
             services.AddSingleton<SceneManager>();
             services.AddSingleton<UserPermissionManager>();
-            services.AddSingleton<DJModeManager>();
+            // services.AddSingleton<DJModeManager>();
+            services.AddSingleton<WakeAudioBuffer>();
             services.AddHostedService<WakeWordBackgroundService>();
             services.AddSingleton<SpeechSynthesizer>();
             services.AddHostedService<StartupHostedService>();
@@ -57,16 +83,14 @@ namespace JARVIS.Services
             services.AddSingleton<VoiceAuthenticator>();
             services.AddSingleton<IBeatDetector, BeatDetector>();
 
+            services.AddSingleton<ILightsService, MqttLightsService>();
 
-
-
-            services.AddSingleton<WeatherController>(sp =>
+            services.AddSingleton<DJModeManager>(sp =>
             {
-                var city = sp
-                    .GetRequiredService<IOptions<AppSettings>>()
-                    .Value
-                    .CityName;
-                return new WeatherController(city);
+                var options = sp.GetRequiredService<IOptions<AppSettings>>();
+                var lightsSvc = sp.GetRequiredService<ILightsService>();
+                var beatDetector = sp.GetRequiredService<IBeatDetector>();
+                return new DJModeManager(options, lightsSvc, beatDetector);
             });
 
 

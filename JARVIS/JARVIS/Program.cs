@@ -15,7 +15,7 @@ namespace JARVIS
         {
             bool isAwake = false;
 
-            string _musicDirectory = "";
+          
 
             var builder = Host.CreateApplicationBuilder(args);
 
@@ -37,8 +37,7 @@ namespace JARVIS
 
             var commandHandler = host.Services.GetRequiredService<CommandHandler>();
 
-            string userId = "unknown"; // Default until recognized
-            PermissionLevel permissionLevel = PermissionLevel.Guest;
+           
 
             var wakeBuffer = new WakeAudioBuffer();
             wakeBuffer.Start();

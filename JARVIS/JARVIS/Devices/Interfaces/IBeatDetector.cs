@@ -1,25 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using NAudio.Wave;
 
-namespace JARVIS.Devices.Interfaces
+namespace JARVIS.Audio
 {
     /// <summary>
-    /// Emits a notification whenever a beat is detected on a playing audio stream.
+    /// Emits events when beats are detected in an audio stream.
     /// </summary>
-    public interface IBeatDetector
+    public interface IBeatDetector : IDisposable
     {
         /// <summary>
-        /// Fires when the next beat is found in the audio.
+        /// Fires when a beat is detected, providing the current playback position.
         /// </summary>
         IObservable<TimeSpan> OnBeat { get; }
 
         /// <summary>
-        /// Attach the detector to an NAudio playback device so it can monitor its output.
+        /// Attach the detector to an AudioFileReader so it can monitor samples.
         /// </summary>
-        void Attach(IWavePlayer player);
+        /// <param name="reader">The audio reader to sample for beats.</param>
+        void Attach(AudioFileReader reader);
     }
 }

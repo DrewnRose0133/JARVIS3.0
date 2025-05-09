@@ -131,7 +131,7 @@ namespace JARVIS.Services
 
             if (input.Contains("weather") || input.Contains("forecast") || input.Contains("outside"))
             {
-                var weather = _weatherCollector.GetWeatherAsync(_city).Result;
+                var weather = _weatherCollector.GetWeatherAsync().Result;
                 _personaController.AdjustMoodBasedOnWeather(weather);
                 _synthesizer.Speak(weather);
                 return true;
@@ -221,6 +221,9 @@ namespace JARVIS.Services
                 _synthesizer.Speak("Sorry, you don't have permission to do that.");
                 return false;
             }
+
+
+            /** Music Controll Section Not Implemented yet
             if (input == "shuffle music")
             {
                 _djModeManager.ShuffleAndPlay();
@@ -260,7 +263,7 @@ namespace JARVIS.Services
                     _synthesizer.Speak("Sorry, I couldn’t find that track.");
                 return true;
             }
-
+            **/
 
 
             return false;

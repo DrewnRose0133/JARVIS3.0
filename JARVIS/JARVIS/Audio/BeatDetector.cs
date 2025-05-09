@@ -1,41 +1,68 @@
 ﻿using System;
 using System.Reactive.Subjects;
 using System.Threading;
-using JARVIS.Devices.Interfaces;
 using NAudio.Wave;
 
 namespace JARVIS.Audio
 {
-    public class BeatDetector : IBeatDetector, IDisposable
+    /// <summary>
+    /// A simple beat detector that polls an AudioFileReader for amplitude peaks and emits beat events.
+    /// </summary>
+    public class BeatDetector : IBeatDetector
     {
         private readonly Subject<TimeSpan> _beats = new();
-        public IObservable<TimeSpan> OnBeat => _beats;
         private AudioFileReader _reader;
         private Timer _timer;
+        private const float Threshold = 0.3f;
+        private const int PollIntervalMs = 300;
 
-        public void Attach(IWavePlayer player)
+        /// <summary>
+        /// Observable sequence of beat timestamps.
+        /// </summary>
+        public IObservable<TimeSpan> OnBeat => _beats;
+
+        /// <summary>
+        /// Attach the detector to an audio reader to start beat detection.
+        /// </summary>
+        public void Attach(AudioFileReader reader)
         {
-            // Assume player.Init(audioFileReader) was already called
-            _reader = /* get the reader you passed to the player */;
-            // Poll every 300ms (tweak as needed)
-            _timer = new Timer(_ =>
-            {
-                float max = 0;
-                // Peek a small window of samples
-                var buffer = new float[1024];
-                int read = _reader.Read(buffer, 0, buffer.Length);
-                for (int i = 0; i < read; i++)
-                    if (Math.Abs(buffer[i]) > max) max = Math.Abs(buffer[i]);
-
-                if (max > 0.3f)  // threshold; tune this!
-                    _beats.OnNext(_reader.CurrentTime);
-            }, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(300));
+            _reader = reader ?? throw new ArgumentNullException(nameof(reader));
+            // Set up a timer to poll the audio buffer at regular intervals
+            _timer = new Timer(_ => PollAudio(), null, TimeSpan.Zero, TimeSpan.FromMilliseconds(PollIntervalMs));
         }
 
+        private void PollAudio()
+        {
+            if (_reader == null) return;
+            try
+            {
+                var buffer = new float[1024];
+                int read = _reader.Read(buffer, 0, buffer.Length);
+                float max = 0;
+                for (int i = 0; i < read; i++)
+                {
+                    var abs = Math.Abs(buffer[i]);
+                    if (abs > max) max = abs;
+                }
+                if (max >= Threshold)
+                {
+                    _beats.OnNext(_reader.CurrentTime);
+                }
+            }
+            catch
+            {
+                // silently ignore poll errors
+            }
+        }
+
+        /// <summary>
+        /// Dispose of resources used by the detector.
+        /// </summary>
         public void Dispose()
         {
             _timer?.Dispose();
-            _beats?.OnCompleted();
+            _beats.OnCompleted();
+            _beats.Dispose();
         }
     }
 }

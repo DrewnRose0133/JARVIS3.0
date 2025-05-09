@@ -61,7 +61,7 @@ namespace JARVIS.Services
             }
 
             // 2) Fetch initial weather and adjust mood
-            var weather = await _weatherCollector.GetWeatherAsync(_cityName);
+            var weather = await _weatherCollector.GetWeatherAsync();
             if (!string.IsNullOrEmpty(weather))
             {
                 _moodController.AdjustMoodBasedOnWeather(weather);

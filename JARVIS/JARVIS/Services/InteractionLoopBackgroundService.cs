@@ -29,7 +29,7 @@ namespace JARVIS.Services
         private readonly CommandHandler _commandHandler;
         private readonly UserPermissionManager _permissionManager;
         private readonly int _sleepTimeoutSeconds;
-        private PermissionLevel _permissionLevel;
+        private PermissionLevel _permissionLevel = PermissionLevel.Guest;
         private WakeWordListener _wakeListener;
         private bool _isAwake;
         private DateTime _lastInputTime;
@@ -45,7 +45,7 @@ namespace JARVIS.Services
             SuggestionEngine suggestionEngine,
             CommandHandler commandHandler,
             UserPermissionManager permissionManager,
-            PermissionLevel permissionLevel,
+            
             IOptions<AppSettings> opts)
         {
             _logger = logger;
@@ -58,13 +58,15 @@ namespace JARVIS.Services
             _commandHandler = commandHandler;
             _permissionManager = permissionManager;
             _sleepTimeoutSeconds = opts.Value.SleepTimeoutSeconds;
-            _permissionLevel = permissionLevel;
+            
         }
 
         public override Task StartAsync(CancellationToken cancellationToken)
         {
-            // Initialize and start the wake-word listener
-            _wakeListener = StartupEngine.InitializeWakeWord("hey jarvis you there", OnWakeDetected);
+            
+
+        // Initialize and start the wake-word listener
+        _wakeListener = StartupEngine.InitializeWakeWord("hey jarvis you there", OnWakeDetected);
             _wakeListener.Start();
 
             _logger.LogInformation("JARVIS is sleeping. Listening for wake word...");
