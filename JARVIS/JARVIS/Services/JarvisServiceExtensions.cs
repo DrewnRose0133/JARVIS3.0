@@ -65,6 +65,9 @@ namespace JARVIS.Services
                 return new VisualizerSocketServer();
             });
 
+
+
+
             services.AddSingleton<AudioEngine>();
             services.AddSingleton<SmartHomeController>();
             services.AddSingleton<MemoryEngine>();

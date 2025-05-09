@@ -3,8 +3,24 @@
   "WorkspaceRootPath": "C:\\Users\\Drew\\Desktop\\Repos\\JARVIS3.0\\JARVIS\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{B6D734E6-F37E-44B5-A632-70C2A5E0FEEE}|JARVIS\\JARVIS.csproj|c:\\users\\drew\\desktop\\repos\\jarvis3.0\\jarvis\\jarvis\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{B6D734E6-F37E-44B5-A632-70C2A5E0FEEE}|JARVIS\\JARVIS.csproj|solutionrelative:jarvis\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B6D734E6-F37E-44B5-A632-70C2A5E0FEEE}|JARVIS\\JARVIS.csproj|c:\\users\\drew\\desktop\\repos\\jarvis3.0\\jarvis\\jarvis\\services\\jarvisserviceextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B6D734E6-F37E-44B5-A632-70C2A5E0FEEE}|JARVIS\\JARVIS.csproj|solutionrelative:jarvis\\services\\jarvisserviceextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{B6D734E6-F37E-44B5-A632-70C2A5E0FEEE}|JARVIS\\JARVIS.csproj|c:\\users\\drew\\desktop\\repos\\jarvis3.0\\jarvis\\jarvis\\controllers\\weathercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{B6D734E6-F37E-44B5-A632-70C2A5E0FEEE}|JARVIS\\JARVIS.csproj|solutionrelative:jarvis\\controllers\\weathercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B6D734E6-F37E-44B5-A632-70C2A5E0FEEE}|JARVIS\\JARVIS.csproj|c:\\users\\drew\\desktop\\repos\\jarvis3.0\\jarvis\\jarvis\\services\\startuphostedservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B6D734E6-F37E-44B5-A632-70C2A5E0FEEE}|JARVIS\\JARVIS.csproj|solutionrelative:jarvis\\services\\startuphostedservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B6D734E6-F37E-44B5-A632-70C2A5E0FEEE}|JARVIS\\JARVIS.csproj|c:\\users\\drew\\desktop\\repos\\jarvis3.0\\jarvis\\jarvis\\services\\commandhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B6D734E6-F37E-44B5-A632-70C2A5E0FEEE}|JARVIS\\JARVIS.csproj|solutionrelative:jarvis\\services\\commandhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{B6D734E6-F37E-44B5-A632-70C2A5E0FEEE}|JARVIS\\JARVIS.csproj|c:\\users\\drew\\desktop\\repos\\jarvis3.0\\jarvis\\jarvis\\services\\wakewordlistener.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -13,14 +29,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{B6D734E6-F37E-44B5-A632-70C2A5E0FEEE}|JARVIS\\JARVIS.csproj|c:\\users\\drew\\desktop\\repos\\jarvis3.0\\jarvis\\jarvis\\audio\\wakewordbackgroundservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{B6D734E6-F37E-44B5-A632-70C2A5E0FEEE}|JARVIS\\JARVIS.csproj|solutionrelative:jarvis\\audio\\wakewordbackgroundservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B6D734E6-F37E-44B5-A632-70C2A5E0FEEE}|JARVIS\\JARVIS.csproj|c:\\users\\drew\\desktop\\repos\\jarvis3.0\\jarvis\\jarvis\\services\\jarvisserviceextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B6D734E6-F37E-44B5-A632-70C2A5E0FEEE}|JARVIS\\JARVIS.csproj|solutionrelative:jarvis\\services\\jarvisserviceextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B6D734E6-F37E-44B5-A632-70C2A5E0FEEE}|JARVIS\\JARVIS.csproj|c:\\users\\drew\\desktop\\repos\\jarvis3.0\\jarvis\\jarvis\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{B6D734E6-F37E-44B5-A632-70C2A5E0FEEE}|JARVIS\\JARVIS.csproj|solutionrelative:jarvis\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{B6D734E6-F37E-44B5-A632-70C2A5E0FEEE}|JARVIS\\JARVIS.csproj|c:\\users\\drew\\desktop\\repos\\jarvis3.0\\jarvis\\jarvis\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -42,11 +50,11 @@
       "DocumentGroups": [
         {
           "DockedWidth": 407,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 4,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 7,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\Drew\\Desktop\\Repos\\JARVIS3.0\\JARVIS\\JARVIS\\Program.cs",
               "RelativeDocumentMoniker": "JARVIS\\Program.cs",
@@ -60,13 +68,13 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 1,
               "Title": "JarvisServiceExtensions.cs",
               "DocumentMoniker": "C:\\Users\\Drew\\Desktop\\Repos\\JARVIS3.0\\JARVIS\\JARVIS\\Services\\JarvisServiceExtensions.cs",
               "RelativeDocumentMoniker": "JARVIS\\Services\\JarvisServiceExtensions.cs",
               "ToolTip": "C:\\Users\\Drew\\Desktop\\Repos\\JARVIS3.0\\JARVIS\\JARVIS\\Services\\JarvisServiceExtensions.cs",
               "RelativeToolTip": "JARVIS\\Services\\JarvisServiceExtensions.cs",
-              "ViewState": "AgIAABcAAAAAAAAAAAAMwCgAAABXAAAAAAAAAA==",
+              "ViewState": "AgIAABEAAAAAAAAAAAAiwEQAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-05-09T12:47:41.436Z",
               "IsPinned": true,
@@ -74,33 +82,59 @@
             },
             {
               "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "StartupHostedService.cs",
+              "DocumentMoniker": "C:\\Users\\Drew\\Desktop\\Repos\\JARVIS3.0\\JARVIS\\JARVIS\\Services\\StartupHostedService.cs",
+              "RelativeDocumentMoniker": "JARVIS\\Services\\StartupHostedService.cs",
+              "ToolTip": "C:\\Users\\Drew\\Desktop\\Repos\\JARVIS3.0\\JARVIS\\JARVIS\\Services\\StartupHostedService.cs",
+              "RelativeToolTip": "JARVIS\\Services\\StartupHostedService.cs",
+              "ViewState": "AgIAACoAAAAAAAAAAAAjwD8AAABCAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-09T18:35:33.045Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 4,
+              "Title": "CommandHandler.cs",
+              "DocumentMoniker": "C:\\Users\\Drew\\Desktop\\Repos\\JARVIS3.0\\JARVIS\\JARVIS\\Services\\CommandHandler.cs",
+              "RelativeDocumentMoniker": "JARVIS\\Services\\CommandHandler.cs",
+              "ToolTip": "C:\\Users\\Drew\\Desktop\\Repos\\JARVIS3.0\\JARVIS\\JARVIS\\Services\\CommandHandler.cs",
+              "RelativeToolTip": "JARVIS\\Services\\CommandHandler.cs",
+              "ViewState": "AgIAAG8AAAAAAAAAAAArwIUAAABAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-09T18:35:20.761Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
               "Title": "appsettings.json",
               "DocumentMoniker": "C:\\Users\\Drew\\Desktop\\Repos\\JARVIS3.0\\JARVIS\\JARVIS\\appsettings.json",
               "RelativeDocumentMoniker": "JARVIS\\appsettings.json",
-              "ToolTip": "C:\\Users\\Drew\\Desktop\\Repos\\JARVIS3.0\\JARVIS\\JARVIS\\appsettings.json",
-              "RelativeToolTip": "JARVIS\\appsettings.json",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "ToolTip": "C:\\Users\\Drew\\Desktop\\Repos\\JARVIS3.0\\JARVIS\\JARVIS\\appsettings.json*",
+              "RelativeToolTip": "JARVIS\\appsettings.json*",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAA8AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
               "WhenOpened": "2025-05-09T18:16:37.097Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 2,
               "Title": "WeatherController.cs",
               "DocumentMoniker": "C:\\Users\\Drew\\Desktop\\Repos\\JARVIS3.0\\JARVIS\\JARVIS\\Controllers\\WeatherController.cs",
               "RelativeDocumentMoniker": "JARVIS\\Controllers\\WeatherController.cs",
-              "ToolTip": "C:\\Users\\Drew\\Desktop\\Repos\\JARVIS3.0\\JARVIS\\JARVIS\\Controllers\\WeatherController.cs*",
-              "RelativeToolTip": "JARVIS\\Controllers\\WeatherController.cs*",
-              "ViewState": "AgIAAAoAAAAAAAAAAAAAACEAAAA5AAAAAAAAAA==",
+              "ToolTip": "C:\\Users\\Drew\\Desktop\\Repos\\JARVIS3.0\\JARVIS\\JARVIS\\Controllers\\WeatherController.cs",
+              "RelativeToolTip": "JARVIS\\Controllers\\WeatherController.cs",
+              "ViewState": "AgIAAAsAAAAAAAAAAAAzwC0AAAAQAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-05-09T18:13:19.577Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 5,
               "Title": "WakeWordListener.cs",
               "DocumentMoniker": "C:\\Users\\Drew\\Desktop\\Repos\\JARVIS3.0\\JARVIS\\JARVIS\\Services\\WakeWordListener.cs",
               "RelativeDocumentMoniker": "JARVIS\\Services\\WakeWordListener.cs",
@@ -113,7 +147,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 9,
               "Title": "StartupEngine.cs",
               "DocumentMoniker": "C:\\Users\\Drew\\Desktop\\Repos\\JARVIS3.0\\JARVIS\\JARVIS\\Services\\StartupEngine.cs",
               "RelativeDocumentMoniker": "JARVIS\\Services\\StartupEngine.cs",
@@ -126,7 +160,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 8,
               "Title": "InteractionLoopBackgroundService.cs",
               "DocumentMoniker": "C:\\Users\\Drew\\Desktop\\Repos\\JARVIS3.0\\JARVIS\\JARVIS\\Services\\InteractionLoopBackgroundService.cs",
               "RelativeDocumentMoniker": "JARVIS\\Services\\InteractionLoopBackgroundService.cs",
@@ -139,7 +173,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 6,
               "Title": "WakeWordBackgroundService.cs",
               "DocumentMoniker": "C:\\Users\\Drew\\Desktop\\Repos\\JARVIS3.0\\JARVIS\\JARVIS\\Audio\\WakeWordBackgroundService.cs",
               "RelativeDocumentMoniker": "JARVIS\\Audio\\WakeWordBackgroundService.cs",
