@@ -16,16 +16,5 @@ namespace JARVIS.Services
             server.Broadcast("Idle");
             return server;
         }
-
-        public static WakeWordListener InitializeWakeWord(string wakePhrase, Action onWake)
-        {
-            var listener = new WakeWordListener(wakePhrase);
-            listener.WakeWordDetected += () =>
-            {
-                try { listener.Stop(); } catch { }
-                onWake?.Invoke();
-            };
-            return listener;
-        }
     }
 }

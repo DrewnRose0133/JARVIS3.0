@@ -1,11 +1,6 @@
-﻿using System;
-using System.Net.Http;
-using System.Text.Json;
-using System.Threading.Tasks;
+﻿using System.Text.Json;
 using Microsoft.Extensions.Options;
 using JARVIS.Config;
-using System.Buffers.Text;
-using SpotifyAPI.Web.Http;
 
 namespace JARVIS.Controllers
 {
@@ -35,7 +30,7 @@ namespace JARVIS.Controllers
             // Let HttpClient.BaseAddress + this path form the full URL
             var relative = $"weather?q={city}&units=imperial&appid={_settings.ApiKey}";
             var fullUri = new Uri(_http.BaseAddress, relative);
-            Console.WriteLine($"[Weather] Fetching: {fullUri}");
+           // Console.WriteLine($"[Weather] Fetching: {fullUri}");
             var response = await _http.GetAsync(fullUri);
 
 

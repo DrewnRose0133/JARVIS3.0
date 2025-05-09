@@ -1,7 +1,4 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Speech.Recognition;
+﻿using System.Speech.Recognition;
 using System.Speech.Synthesis;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -10,7 +7,6 @@ using JARVIS.Config;
 using JARVIS.Controllers;
 using JARVIS.Core;
 using JARVIS.UserSettings;
-using JARVIS.Audio;
 
 namespace JARVIS.Services
 {
@@ -67,8 +63,8 @@ namespace JARVIS.Services
             
 
         // Initialize and start the wake-word listener
-        _wakeListener = StartupEngine.InitializeWakeWord("hey jarvis you there", OnWakeDetected);
-            _wakeListener.Start();
+       // _wakeListener = StartupEngine.InitializeWakeWord("hey jarvis you there", OnWakeDetected);
+          //  _wakeListener.Start();
 
             _logger.LogInformation("JARVIS is sleeping. Listening for wake word...");
             _synthesizer.Speak("System online, sir. Awaiting activation.");
@@ -128,7 +124,7 @@ namespace JARVIS.Services
         private void OnWakeDetected()
         {
             _isAwake = true;
-            _wakeListener.Stop();
+           // _wakeListener.Stop();
             _logger.LogInformation("Wake word detected. Switching to active listening...");
             _visualizerServer.Broadcast("Speaking");
             _synthesizer.Speak(_personaController.GetPreamble());
@@ -149,7 +145,7 @@ namespace JARVIS.Services
             _userInput = string.Empty;
             UserSessionManager.Reset();
             _permissionLevel = PermissionLevel.Guest;
-            _wakeListener.Start();
+            //_wakeListener.Start();
             _visualizerServer.Broadcast("Idle");
         }
     }

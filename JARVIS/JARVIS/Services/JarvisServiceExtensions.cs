@@ -12,7 +12,6 @@ using System.Speech.Recognition;
 using JARVIS.Python;
 using JARVIS.Devices.Interfaces;
 using JARVIS.Devices;
-using System.Configuration;
 
 namespace JARVIS.Services
 {
@@ -65,28 +64,12 @@ namespace JARVIS.Services
                 return new VisualizerSocketServer();
             });
 
-
-
-
-            services.AddSingleton<AudioEngine>();
-            services.AddSingleton<SmartHomeController>();
-            services.AddSingleton<MemoryEngine>();
-            services.AddSingleton<StatusReporter>();
-            services.AddSingleton<StartupEngine>();
-            services.AddSingleton<SuggestionEngine>();
-            services.AddSingleton<VoiceStyleController>();
-            services.AddSingleton<SceneManager>();
-            services.AddSingleton<UserPermissionManager>();
-            // services.AddSingleton<DJModeManager>();
-            services.AddSingleton<WakeAudioBuffer>();
-            services.AddHostedService<WakeWordBackgroundService>();
-            services.AddSingleton<SpeechSynthesizer>();
-            services.AddHostedService<StartupHostedService>();
-            services.AddHostedService<InteractionLoopBackgroundService>();
-            services.AddSingleton<VoiceAuthenticator>();
-            services.AddSingleton<IBeatDetector, BeatDetector>();
-
-            services.AddSingleton<ILightsService, MqttLightsService>();
+            services.AddSingleton(sp =>
+            {
+                var recognizer = new SpeechRecognitionEngine();
+                // TODO: load your grammar, set input device, etc.
+                return recognizer;
+            });
 
             services.AddSingleton<DJModeManager>(sp =>
             {
@@ -97,12 +80,28 @@ namespace JARVIS.Services
             });
 
 
-            services.AddSingleton(sp =>
-            {
-                var recognizer = new SpeechRecognitionEngine();
-                // TODO: load your grammar, set input device, etc.
-                return recognizer;
-            });
+            services.AddSingleton<AudioEngine>();
+            services.AddSingleton<SmartHomeController>();
+            services.AddSingleton<MemoryEngine>();
+            services.AddSingleton<StatusReporter>();
+            services.AddSingleton<StartupEngine>();
+            services.AddSingleton<SuggestionEngine>();
+            services.AddSingleton<VoiceStyleController>();
+            services.AddSingleton<SceneManager>();
+            services.AddSingleton<UserPermissionManager>();            
+            services.AddSingleton<WakeAudioBuffer>();
+            services.AddHostedService<WakeWordListener>();
+            services.AddSingleton<SpeechSynthesizer>();
+            services.AddHostedService<StartupHostedService>();
+            services.AddHostedService<InteractionLoopBackgroundService>();
+            services.AddSingleton<VoiceAuthenticator>();
+            services.AddSingleton<IBeatDetector, BeatDetector>();
+            services.AddSingleton<ILightsService, MqttLightsService>();
+
+            
+
+
+            
 
             services.AddSingleton<CommandHandler>(sp =>
             {

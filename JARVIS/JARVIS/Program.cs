@@ -37,11 +37,6 @@ namespace JARVIS
 
             var commandHandler = host.Services.GetRequiredService<CommandHandler>();
 
-           
-
-            var wakeBuffer = new WakeAudioBuffer();
-            wakeBuffer.Start();
-
             // If you need a scope:
             using var scope = host.Services.CreateScope();
             var sp = scope.ServiceProvider;

@@ -53,11 +53,11 @@ namespace JARVIS.Services
             // 1) Auto-detect city if missing
             if (string.IsNullOrWhiteSpace(_cityName))
             {
-                _logger.LogInformation("Attempting to auto-detect city…");
+              //  _logger.LogInformation("Attempting to auto-detect city…");
                 city = await LocationHelper.GetCityAsync();   // static call
-                _logger.LogInformation("Detected City: {City}", city);
+              //  _logger.LogInformation("Detected City: {City}", city);
                 _visualizerServer.Broadcast("Speaking");
-                _synthesizer.Speak($"Detected city as {city}");
+              //  _synthesizer.Speak($"Detected city as {city}");
             }
 
             // 2) Fetch initial weather and adjust mood
@@ -65,13 +65,13 @@ namespace JARVIS.Services
             if (!string.IsNullOrEmpty(weather))
             {
                 _moodController.AdjustMoodBasedOnWeather(weather);
-                _logger.LogInformation("Startup Weather: {Weather}", weather);
+               // _logger.LogInformation("Startup Weather: {Weather}", weather);
                 _synthesizer.Speak(weather);
 
                 var suggestion = _suggestionEngine.CheckForSuggestion(DateTime.Now);
                 if (!string.IsNullOrEmpty(suggestion))
                 {
-                    _logger.LogInformation("Suggestion: {Suggestion}", suggestion);
+                  //  _logger.LogInformation("Suggestion: {Suggestion}", suggestion);
                     _synthesizer.Speak(suggestion);
                 }
             }
@@ -81,7 +81,7 @@ namespace JARVIS.Services
             {
                 if (e.Result?.Text is string text)
                 {
-                    _logger.LogDebug("Recognized input: {Text}", text);
+                   // _logger.LogDebug("Recognized input: {Text}", text);
                     _moodController.AdjustToneBasedOnAttitude(text);
                     _visualizerServer.Broadcast("Processing");
                 }
