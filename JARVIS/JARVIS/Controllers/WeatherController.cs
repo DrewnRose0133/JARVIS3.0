@@ -4,6 +4,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using JARVIS.Config;
+using System.Buffers.Text;
 
 namespace JARVIS.Controllers
 {
@@ -27,11 +28,10 @@ namespace JARVIS.Controllers
 
             city = Uri.EscapeDataString(city);
 
-            // Compose the relative path including API key
-            var path = $"weather?q={city}&units=imperial&appid={_settings.ApiKey}";
-
-            // Let HttpClient.BaseAddress + this path form the full URL
-            var response = await _http.GetAsync(path);
+            var relative = $"weather?q={city}&units=imperial&appid={_settings.ApiKey}";
+            var fullUri = new Uri(_http.BaseAddress, relative);
+            Console.WriteLine($"[Weather] Fetching: {fullUri}");
+            var response = await _http.GetAsync(fullUri);
             if (!response.IsSuccessStatusCode)
             {
                 var body = await response.Content.ReadAsStringAsync();

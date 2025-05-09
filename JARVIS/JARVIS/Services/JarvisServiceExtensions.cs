@@ -38,9 +38,9 @@ namespace JARVIS.Services
             services.AddHttpClient<WeatherController>((sp, client) =>
             {
                 var ws = sp.GetRequiredService<IOptions<WeatherSettings>>().Value;
-                client.BaseAddress = new Uri(ws.BaseUrl.EndsWith("/")
-                    ? ws.BaseUrl
-                    : ws.BaseUrl + "/");
+                var baseUrl = ws.BaseUrl.EndsWith('/') ? ws.BaseUrl : ws.BaseUrl + '/';
+                client.BaseAddress = new Uri(ws.BaseUrl);
+                
             });
 
             // Bind general settings

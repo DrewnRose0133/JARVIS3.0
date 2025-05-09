@@ -10,6 +10,7 @@ using JARVIS.Config;
 using JARVIS.Controllers;
 using JARVIS.Core;
 using JARVIS.UserSettings;
+using JARVIS.Audio;
 
 namespace JARVIS.Services
 {
