@@ -23,7 +23,7 @@ namespace JARVIS.Audio
         private WaveInEvent _waveIn;
         private bool _recording = false;
 
-        public void Start()
+        public void StartBuffering()
         {
             if (_recording) return;
 
@@ -40,7 +40,7 @@ namespace JARVIS.Audio
             Console.WriteLine("[WakeAudioBuffer] Recording started (rolling buffer).");
         }
 
-        public void Stop()
+        public void StopBuffering()
         {
             if (!_recording) return;
 

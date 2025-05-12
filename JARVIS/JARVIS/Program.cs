@@ -15,8 +15,6 @@ namespace JARVIS
         {
             bool isAwake = false;
 
-          
-
             var builder = Host.CreateApplicationBuilder(args);
 
             builder.Services.AddJarvisServices(builder.Configuration);
@@ -65,26 +63,6 @@ namespace JARVIS
                     }
                 }
             });
-
-
-            #region TextInput
-            string userInput = "";
-            DateTime lastInputTime = DateTime.Now;
-            _ = Task.Run(() =>
-            {
-                while (true)
-                {
-                    var typedInput = Console.ReadLine();
-                    if (!string.IsNullOrWhiteSpace(typedInput))
-                    {
-                        userInput = typedInput;
-                        isAwake = true;
-                        lastInputTime = DateTime.Now;
-                    }
-                }
-            });
-            #endregion
-
         }
     }
 }

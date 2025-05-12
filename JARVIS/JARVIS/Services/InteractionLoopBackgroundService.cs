@@ -66,7 +66,7 @@ namespace JARVIS.Services
        // _wakeListener = StartupEngine.InitializeWakeWord("hey jarvis you there", OnWakeDetected);
           //  _wakeListener.Start();
 
-            _logger.LogInformation("JARVIS is sleeping. Listening for wake word...");
+            Console.WriteLine("JARVIS is sleeping. Listening for wake word...");
             _synthesizer.Speak("System online, sir. Awaiting activation.");
             _visualizerServer.Broadcast("Idle");
             _lastInputTime = DateTime.Now;
@@ -94,7 +94,7 @@ namespace JARVIS.Services
                 // If awake but no input for timeout, go back to sleep
                 if (_isAwake && (DateTime.Now - _lastInputTime).TotalSeconds > _sleepTimeoutSeconds)
                 {
-                    _logger.LogInformation("No input received; returning to sleep.");
+                    Console.WriteLine("No input received; returning to sleep.");
                     _synthesizer.Speak($"No input received for {_sleepTimeoutSeconds} seconds. Returning to sleep mode, sir.");
                     ResetRecognition();
                     continue;
@@ -125,7 +125,7 @@ namespace JARVIS.Services
         {
             _isAwake = true;
            // _wakeListener.Stop();
-            _logger.LogInformation("Wake word detected. Switching to active listening...");
+            Console.WriteLine("Wake word detected. Switching to active listening...");
             _visualizerServer.Broadcast("Speaking");
             _synthesizer.Speak(_personaController.GetPreamble());
             _visualizerServer.Broadcast("Listening");

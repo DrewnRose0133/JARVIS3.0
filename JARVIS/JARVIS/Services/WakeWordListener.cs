@@ -1,18 +1,25 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Linq;
+using System.Globalization;
 using System.Speech.Recognition;
 using System.Speech.Synthesis;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using JARVIS.Python;
 using JARVIS.UserSettings;
 using JARVIS.Controllers;
+using JARVIS.Services;
+using JARVIS.Config;
+using JARVIS.Devices.Interfaces;
 using JARVIS.Audio;
 
 namespace JARVIS.Services
 {
     /// <summary>
-    /// Hosted service that listens for a wake word, handles authentication,
-    /// and switches to active recognition on wake.
+    /// Hosted service that listens for a wake word or console command,
+    /// handles authentication, and switches to active recognition.
     /// </summary>
     public class WakeWordListener : BackgroundService
     {
@@ -54,14 +61,15 @@ namespace JARVIS.Services
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            StartListening();
+            // Start both wake-listening methods
+            StartWakeRecognition();
+            StartConsoleWakeListener();
             return Task.CompletedTask;
         }
 
-        private void StartListening()
+        private void StartWakeRecognition()
         {
-            // Begin buffering raw audio for wake-word authentication
-            _wakeBuffer.Start();
+            _wakeBuffer.StartBuffering();
 
             _wakeRecognizer = new SpeechRecognitionEngine(CultureInfo.CurrentCulture);
             _wakeRecognizer.SetInputToDefaultAudioDevice();
@@ -74,85 +82,89 @@ namespace JARVIS.Services
             _wakeRecognizer.SpeechRecognized += OnWakeRecognized;
             _wakeRecognizer.RecognizeAsync(RecognizeMode.Multiple);
 
-            _logger.LogInformation("[WakeWordListener] Listening for wake word...");
+            //_logger.LogInformation("[WakeWordListener] Listening for wake word...");
+            Console.WriteLine("[WakeWordListener] Listening for wake word...");
         }
+
+        private void StartConsoleWakeListener()
+        {
+            Task.Run(() =>
+            {
+                //_logger.LogInformation("[WakeWordListener] Console wake enabled. Type the wake word to activate.");
+                Console.WriteLine("[WakeWordListener] Console wake enabled. Type the wake word to activate.");
+                while (true)
+                {
+                    var line = Console.ReadLine()?.Trim().ToLowerInvariant();
+                    if (line == _wakeWord)
+                    {
+                        //_logger.LogInformation("[WakeWordListener] Console wake phrase detected.");
+                        Console.WriteLine("[WakeWordListener] Console wake phrase detected.");
+                        ProcessWake();
+                    }
+                }
+            });
+        }
+
         private void OnWakeRecognized(object sender, SpeechRecognizedEventArgs e)
         {
             if (!e.Result.Text.ToLowerInvariant().Contains(_wakeWord))
                 return;
+            //_logger.LogInformation("[WakeWordListener] Wake word detected via voice.");
+            Console.WriteLine("[WakeWordListener] Wake word detected via voice.");
+            ProcessWake();
+        }
 
-            _logger.LogInformation("[WakeWordListener] Wake word detected.");
-
-            // Stop recognition and audio buffering
+        private void ProcessWake()
+        {
+            // Stop further wake-word recognition
             try { _wakeRecognizer.RecognizeAsyncStop(); } catch { }
-            _wakeRecognizer.Dispose();
-            _wakeBuffer.Stop();
+            _wakeRecognizer?.Dispose();
 
-            // Save buffered audio for authentication
+            // Stop and save buffered audio
+            _wakeBuffer.StopBuffering();
             var wavPath = Path.Combine(AppContext.BaseDirectory, "wake_word.wav");
             _wakeBuffer.SaveBufferedAudio(wavPath);
 
-            // ... existing authentication logic follows ...(object sender, SpeechRecognizedEventArgs e)
+            // Authenticate user
+            var raw = _voiceAuth.IdentifyUserFromWav(wavPath);
+            _logger.LogDebug("[WakeWordListener] Raw voice-auth result: {Raw}", raw);
+            var userId = raw.Split('\n').Last().Trim().ToLowerInvariant();
+            var permissionLevel = _permissionManager.GetPermission(userId);
+            UserSessionManager.Authenticate(userId, permissionLevel);
+
+            if (userId == "unknown" || permissionLevel == PermissionLevel.Guest)
             {
-                if (!e.Result.Text.ToLowerInvariant().Contains(_wakeWord))
-                    return;
+                //_logger.LogWarning("Voice authentication failed. User: {UserId}, Permission: {Permission}", userId, permissionLevel);
+                Console.WriteLine("Voice authentication failed. User: {UserId}, Permission: {Permission}", userId, permissionLevel);
+                _synthesizer.Speak("Access denied. Please authenticate.");
+                // Restart wake recognition
+                StartWakeRecognition();
+                return;
+            }
 
-                _logger.LogInformation("[WakeWordListener] Wake word detected.");
+           // _logger.LogInformation("Voice authentication succeeded. User: {UserId}, Permission: {Permission}", userId, permissionLevel);
+            Console.WriteLine("Voice authentication succeeded. User: {UserId}, Permission: {Permission}", userId, permissionLevel);
+            _synthesizer.Speak(_personaController.GetPreamble());
 
-                // Stop wake-word listening
-                try { _wakeRecognizer.RecognizeAsyncStop(); } catch { }
-                _wakeRecognizer.Dispose();
-
-                // Wait briefly to ensure buffered audio is flushed into the file
-                Thread.Sleep(300);
-
-                // Save buffered audio for authentication");
-                // Stop wake-word listening
-                try { _wakeRecognizer.RecognizeAsyncStop(); } catch { }
-                _wakeRecognizer.Dispose();
-
-                // Save buffered audio for authentication
-                _wakeBuffer.SaveBufferedAudio("wake_word.wav");
-
-                // Authenticate user
-                var userId = _voiceAuth
-                    .IdentifyUserFromWav("wake_word.wav")
-                    .Split('\n').Last().Trim().ToLowerInvariant();
-                var permissionLevel = _permissionManager.GetPermission(userId);
-                UserSessionManager.Authenticate(userId, permissionLevel);
-
-                if (userId == "unknown" || permissionLevel == PermissionLevel.Guest)
+            // Begin active recognition
+            _visualizerServer.Broadcast("Listening");
+            try
+            {
+                _activeRecognizer.SetInputToDefaultAudioDevice();
+                _activeRecognizer.LoadGrammar(new DictationGrammar());
+                _activeRecognizer.SpeechRecognized += async (s, args) =>
                 {
-                    _logger.LogWarning("Voice authentication failed. User: {UserId}, Permission: {Permission}", userId, permissionLevel);
-                    _synthesizer.Speak("Access denied. Please authenticate.");
-                    // re-start wake-word listening
-                    StartListening();
-                    return;
-                }
-
-                _logger.LogInformation("Voice authentication succeeded. User: {UserId}, Permission: {Permission}", userId, permissionLevel);
-                _synthesizer.Speak(_personaController.GetPreamble());
-
-                // Broadcast and enter active recognition
-                _visualizerServer.Broadcast("Listening");
-                try
-                {
-                    _activeRecognizer.SetInputToDefaultAudioDevice();
-                    _activeRecognizer.LoadGrammar(new DictationGrammar());
-                    _activeRecognizer.SpeechRecognized += async (s, args) =>
+                    var text = args.Result?.Text;
+                    if (!string.IsNullOrWhiteSpace(text))
                     {
-                        var text = args.Result?.Text;
-                        if (!string.IsNullOrWhiteSpace(text))
-                        {
-                            await _commandHandler.Handle(text);
-                        }
-                    };
-                    _activeRecognizer.RecognizeAsync(RecognizeMode.Multiple);
-                }
-                catch (InvalidOperationException ex)
-                {
-                    _logger.LogDebug(ex, "Active recognizer already running.");
-                }
+                        await _commandHandler.Handle(text);
+                    }
+                };
+                _activeRecognizer.RecognizeAsync(RecognizeMode.Multiple);
+            }
+            catch (InvalidOperationException ex)
+            {
+                _logger.LogDebug(ex, "Active recognizer already running.");
             }
         }
     }
