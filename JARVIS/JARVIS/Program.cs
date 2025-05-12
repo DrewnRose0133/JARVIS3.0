@@ -2,7 +2,7 @@
 using JARVIS.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
-using JARVIS.Audio;
+using Microsoft.Extensions.Logging;
 using JARVIS.UserSettings;
 using JARVIS.Core;
 using System.Speech.Synthesis;
@@ -21,7 +21,7 @@ namespace JARVIS
             builder.Services.AddHostedService<JarvisHostedService>();
 
             var app = builder.Build();
-            
+
 
             var host = Host.CreateDefaultBuilder(args)
                 .ConfigureAppConfiguration((ctx, cfg) =>
@@ -29,8 +29,19 @@ namespace JARVIS
                     cfg.SetBasePath(AppContext.BaseDirectory)
                        .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
                 })
-                .ConfigureServices((ctx, svc) =>
-                    svc.AddJarvisServices(ctx.Configuration))
+                .ConfigureLogging(logging =>
+                {
+                    logging.ClearProviders();
+                    logging.AddConsole();
+                    logging.SetMinimumLevel(LogLevel.Information);
+                    // Example: suppress Info from WakeWordListener only
+                    logging.AddFilter("JARVIS.Services.WakeWordListener", LogLevel.Warning);
+                })
+                .ConfigureServices((ctx, services) =>
+                {
+                    services.AddJarvisServices(ctx.Configuration);
+                    services.AddHostedService<JarvisHostedService>();
+                })
                 .Build();
 
             var commandHandler = host.Services.GetRequiredService<CommandHandler>();

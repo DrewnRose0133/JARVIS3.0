@@ -1,20 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿// StartupEngine.cs
+using System.Threading;
 using System.Threading.Tasks;
-using JARVIS.Services;
+using Microsoft.Extensions.Hosting;
 
-namespace JARVIS.Services
+public class StartupEngine : BackgroundService
 {
-    public class StartupEngine
+    private readonly VisualizerSocketServer _socket;
+
+    public StartupEngine(VisualizerSocketServer socket) => _socket = socket;
+
+    protected override Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        public static VisualizerSocketServer InitializeVisualizer()
-        {
-            var server = new VisualizerSocketServer();
-            server.Start();
-            server.Broadcast("Idle");
-            return server;
-        }
+        _socket.Start();      // kicks off your WebSocket server
+        return Task.CompletedTask;     // keep the host alive
     }
 }

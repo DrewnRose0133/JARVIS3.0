@@ -79,12 +79,16 @@ namespace JARVIS.Services
                 return new DJModeManager(options, lightsSvc, beatDetector);
             });
 
+           
 
+            
+            services.AddSingleton<ConversationEngine>();
             services.AddSingleton<AudioEngine>();
             services.AddSingleton<SmartHomeController>();
             services.AddSingleton<MemoryEngine>();
             services.AddSingleton<StatusReporter>();
-            services.AddSingleton<StartupEngine>();
+            services.AddSingleton<VisualizerSocketServer>();
+            services.AddHostedService<StartupEngine>();
             services.AddSingleton<SuggestionEngine>();
             services.AddSingleton<VoiceStyleController>();
             services.AddSingleton<SceneManager>();
@@ -97,17 +101,27 @@ namespace JARVIS.Services
             services.AddSingleton<VoiceAuthenticator>();
             services.AddSingleton<IBeatDetector, BeatDetector>();
             services.AddSingleton<ILightsService, MqttLightsService>();
+            services.AddSingleton<PromptSettings>();            
+            services.AddSingleton<ConversationEngine>();
 
+            services.AddHttpClient<PromptEngine>((sp, client) =>
+            {
+                var settings = sp.GetRequiredService<IOptions<LocalAISettings>>().Value;
+                client.BaseAddress = new Uri(settings.BaseUrl);
+            });
+
+            services.AddSingleton<PersonaController>();
             
 
 
-            
+
+
 
             services.AddSingleton<CommandHandler>(sp =>
             {
                 var opts = sp.GetRequiredService<IOptions<AppSettings>>().Value;
                 return new CommandHandler(
-                    sp.GetRequiredService<PersonaController>(),                 
+                    sp.GetRequiredService<PersonaController>(),
                     sp.GetRequiredService<MemoryEngine>(),
                     sp.GetRequiredService<WeatherController>(),
                     sp.GetRequiredService<SceneManager>(),

@@ -22,9 +22,6 @@ namespace JARVIS.Services
         private readonly DJModeManager _djModeManager;
         private readonly UserPermissionManager _userPermissionManager;
 
-
-
-
         public CommandHandler(
             PersonaController personaController,           
             MemoryEngine memoryEngine,

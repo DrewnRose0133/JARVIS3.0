@@ -14,6 +14,7 @@ using JARVIS.Services;
 using JARVIS.Config;
 using JARVIS.Devices.Interfaces;
 using JARVIS.Audio;
+using JARVIS.Core;
 
 namespace JARVIS.Services
 {
@@ -34,6 +35,7 @@ namespace JARVIS.Services
         private readonly SpeechRecognitionEngine _activeRecognizer;
         private readonly CommandHandler _commandHandler;
         private readonly ILogger<WakeWordListener> _logger;
+        private readonly ConversationEngine _conversationEngine;
 
         public WakeWordListener(
             VoiceAuthenticator voiceAuth,
@@ -44,6 +46,7 @@ namespace JARVIS.Services
             SpeechRecognitionEngine activeRecognizer,
             WakeAudioBuffer wakeBuffer,
             CommandHandler commandHandler,
+            ConversationEngine conversationEngine,
             ILogger<WakeWordListener> logger,
             string wakeWord = "hey jarvis you there")
         {
@@ -56,6 +59,7 @@ namespace JARVIS.Services
             _activeRecognizer = activeRecognizer;
             _wakeBuffer = wakeBuffer;
             _commandHandler = commandHandler;
+            _conversationEngine = conversationEngine;
             _logger = logger;
         }
 
@@ -143,29 +147,55 @@ namespace JARVIS.Services
             }
 
            // _logger.LogInformation("Voice authentication succeeded. User: {UserId}, Permission: {Permission}", userId, permissionLevel);
-            Console.WriteLine("Voice authentication succeeded. User: {UserId}, Permission: {Permission}", userId, permissionLevel);
+            //Console.WriteLine("Voice authentication succeeded. User: {UserId}, Permission: {Permission}", userId, permissionLevel);
+            Console.WriteLine($"Voice authentication succeeded. UserId: {userId}, Permission: {permissionLevel}");
             _synthesizer.Speak(_personaController.GetPreamble());
 
-            // Begin active recognition
+            // --- Begin active recognition ---
             _visualizerServer.Broadcast("Listening");
             try
             {
+                _activeRecognizer.UnloadAllGrammars();
                 _activeRecognizer.SetInputToDefaultAudioDevice();
                 _activeRecognizer.LoadGrammar(new DictationGrammar());
+
                 _activeRecognizer.SpeechRecognized += async (s, args) =>
                 {
-                    var text = args.Result?.Text;
-                    if (!string.IsNullOrWhiteSpace(text))
+                    var text = args.Result?.Text?.Trim();
+                    Console.WriteLine($"[WakeWordListener] Heard: {text}");
+                    if (string.IsNullOrWhiteSpace(text)) return;
+
+                    bool handled = await _commandHandler.Handle(text);
+                    string response;
+                    if (handled)
                     {
-                        await _commandHandler.Handle(text);
+                        response = "Command executed.";
                     }
+                    else
+                    {
+                        // <-- here’s your conversation fallback
+                        _conversationEngine.AddUserMessage(text);
+                        response = _conversationEngine.BuildPrompt();               // build the prompt
+                                                                                    // you'd then POST that prompt via your PromptEngine, e.g.:
+                        response = await _conversationEngine.ProcessAsync(text);    // assume you've added this
+                        _conversationEngine.AddAssistantMessage(response);
+                    }
+
+                    Console.WriteLine($"[JARVIS] → {response}");
+                    _synthesizer.Speak(response);
                 };
+
+                _activeRecognizer.SpeechRecognitionRejected += (s, args) =>
+                    Console.WriteLine("[WakeWordListener] No speech matched.");
+
                 _activeRecognizer.RecognizeAsync(RecognizeMode.Multiple);
             }
             catch (InvalidOperationException ex)
             {
                 _logger.LogDebug(ex, "Active recognizer already running.");
             }
+            // --- End active recognition ---
+
         }
     }
 }
