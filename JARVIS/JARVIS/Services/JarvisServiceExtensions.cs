@@ -12,6 +12,7 @@ using System.Speech.Recognition;
 using JARVIS.Python;
 using JARVIS.Devices.Interfaces;
 using JARVIS.Devices;
+using System.Configuration;
 
 namespace JARVIS.Services
 {
@@ -28,19 +29,13 @@ namespace JARVIS.Services
                 .Validate(s => !string.IsNullOrWhiteSpace(s.ModelId), "ModelId is required")
                 .ValidateOnStart();
 
-            services
-                .AddOptions<WeatherSettings>()
-                .Bind(config.GetSection("OpenWeather"))
-                .ValidateDataAnnotations()
-                .ValidateOnStart();
+            // right:
+            services.Configure<WeatherSettings>(config.GetSection("WeatherSettings"));
 
-            services.AddHttpClient<WeatherController>((sp, client) =>
-            {
-                var ws = sp.GetRequiredService<IOptions<WeatherSettings>>().Value;
-                var baseUrl = ws.BaseUrl.EndsWith('/') ? ws.BaseUrl : ws.BaseUrl + '/';
-                client.BaseAddress = new Uri(ws.BaseUrl);
-                
-            });
+            services.AddHttpClient<WeatherController>(c =>
+                c.BaseAddress = new Uri("http://api.weatherapi.com/v1/"));
+            services.AddSingleton<IWeatherCollector, WeatherController>();
+
 
             // Bind general settings
             services.Configure<AppSettings>(config);

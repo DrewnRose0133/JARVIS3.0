@@ -126,7 +126,7 @@ namespace JARVIS.Services
                     Console.WriteLine($"> Typed command: \"{line}\"");
                     bool handled = await _commandHandler.Handle(line);
                     string response = handled
-                        ? "Command executed."
+                        ? ""
                         : await _conversationEngine.ProcessAsync(line);
 
                     Console.WriteLine($"[JARVIS] → {response}");
@@ -229,7 +229,7 @@ namespace JARVIS.Services
                     _idleTimer.Stop();
                     bool handled = await _commandHandler.Handle(text);
                     string response = handled
-                        ? "Command executed."
+                        ? ""
                         : await _conversationEngine.ProcessAsync(text);
 
                     Console.WriteLine($"[JARVIS] → {response}");

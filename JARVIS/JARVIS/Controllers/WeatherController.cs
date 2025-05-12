@@ -1,10 +1,19 @@
-﻿using System.Text.Json;
+﻿using System;
+using System.Linq;
+using System.Net.Http;
+using System.Text;
+using System.Text.Json;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using JARVIS.Config;
+using JARVIS.Controllers;
 
 namespace JARVIS.Controllers
 {
-    public class WeatherController
+    /// <summary>
+    /// Uses WeatherAPI.com to provide current, specific-date, and weekly forecasts.
+    /// </summary>
+    public class WeatherController : IWeatherCollector
     {
         private readonly HttpClient _http;
         private readonly WeatherSettings _settings;
@@ -15,45 +24,84 @@ namespace JARVIS.Controllers
             _settings = opts.Value;
         }
 
+        /// <summary>
+        /// Gets current weather (today) via WeatherAPI.com
+        /// </summary>
         public async Task<string> GetWeatherAsync()
         {
-            // Ensure City is set
-            var city = _settings.City;
-            if (string.IsNullOrWhiteSpace(city))
-                throw new InvalidOperationException("OpenWeather:City must be configured");
+            var city = Uri.EscapeDataString(_settings.City);
+            var url = $"forecast.json?key={_settings.ApiKey}&q={city}&days=1&aqi=no&alerts=no";
+            var resp = await _http.GetAsync(url);
+            resp.EnsureSuccessStatusCode();
 
-            city = Uri.EscapeDataString(city);
+            using var doc = JsonDocument.Parse(await resp.Content.ReadAsStringAsync());
+            var location = doc.RootElement.GetProperty("location").GetProperty("name").GetString();
+            var current = doc.RootElement.GetProperty("current");
+            var tempF = current.GetProperty("temp_f").GetDouble();
+            var desc = current.GetProperty("condition").GetProperty("text").GetString();
 
-            // Compose the relative path including API key
-            var path = $"weather?q={city}&units=imperial&appid={_settings.ApiKey}";
+            return $"It is currently {tempF:F1}°F and {desc} in {location}.";
+        }
 
-            // Let HttpClient.BaseAddress + this path form the full URL
-            var relative = $"weather?q={city}&units=imperial&appid={_settings.ApiKey}";
-            var fullUri = new Uri(_http.BaseAddress, relative);
-           // Console.WriteLine($"[Weather] Fetching: {fullUri}");
-            var response = await _http.GetAsync(fullUri);
+        /// <summary>
+        /// Gets forecast for a specific date (tomorrow or a weekday) via WeatherAPI.com
+        /// </summary>
+        public async Task<string> GetForecastByDateAsync(DateTime date)
+        {
+            // Determine days parameter (WeatherAPI allows up to 10)
+            int daysAhead = Math.Clamp((date.Date - DateTime.Today).Days + 1, 1, 10);
+            var city = Uri.EscapeDataString(_settings.City);
+            var url = $"forecast.json?key={_settings.ApiKey}&q={city}&days={daysAhead}&aqi=no&alerts=no";
+            var resp = await _http.GetAsync(url);
+            resp.EnsureSuccessStatusCode();
 
+            var json = await resp.Content.ReadAsStringAsync();
+            using var doc = JsonDocument.Parse(json);
 
+            var forecastArray = doc.RootElement
+                .GetProperty("forecast")
+                .GetProperty("forecastday")
+                .EnumerateArray();
 
-            if (!response.IsSuccessStatusCode)
+            // pick the last element which corresponds to our target date
+            var dayElem = forecastArray.Last();
+            var fcDate = DateTime.Parse(dayElem.GetProperty("date").GetString());
+            var day = dayElem.GetProperty("day");
+            var desc = day.GetProperty("condition").GetProperty("text").GetString();
+            var maxF = day.GetProperty("maxtemp_f").GetDouble();
+            var minF = day.GetProperty("mintemp_f").GetDouble();
+            var location = doc.RootElement.GetProperty("location").GetProperty("name").GetString();
+
+            return $"{fcDate:dddd, MMM d}: {desc}, high {maxF:F0}°, low {minF:F0}° in {location}.";
+        }
+
+        /// <summary>
+        /// Gets a 7-day forecast via WeatherAPI.com
+        /// </summary>
+        public async Task<string> GetWeeklyForecastAsync()
+        {
+            var city = Uri.EscapeDataString(_settings.City);
+            var url = $"forecast.json?key={_settings.ApiKey}&q={city}&days=7&aqi=no&alerts=no";
+            var resp = await _http.GetAsync(url);
+            resp.EnsureSuccessStatusCode();
+
+            using var doc = JsonDocument.Parse(await resp.Content.ReadAsStringAsync());
+            var sb = new StringBuilder("7-day forecast:\n");
+
+            foreach (var dayElem in doc.RootElement
+                .GetProperty("forecast")
+                .GetProperty("forecastday")
+                .EnumerateArray())
             {
-                var body = await response.Content.ReadAsStringAsync();
-                throw new HttpRequestException(
-                    $"Weather API returned {(int)response.StatusCode} {response.StatusCode}: {body}");
+                var fcDate = DateTime.Parse(dayElem.GetProperty("date").GetString());
+                var day = dayElem.GetProperty("day");
+                var desc = day.GetProperty("condition").GetProperty("text").GetString();
+                var maxF = day.GetProperty("maxtemp_f").GetDouble();
+                var minF = day.GetProperty("mintemp_f").GetDouble();
+                sb.AppendLine($"{fcDate:dddd}: {desc}, H {maxF:F0}°, L {minF:F0}°");
             }
 
-            // Parse the JSON payload
-            using var doc = JsonDocument.Parse(await response.Content.ReadAsStringAsync());
-            var root = doc.RootElement;
-
-            var temp = root.GetProperty("main").GetProperty("temp").GetDouble();
-            var description = root
-                .GetProperty("weather")[0]
-                .GetProperty("description")
-                .GetString() ?? "unknown";
-            var cityName = root.GetProperty("name").GetString() ?? city;
-
-            return $"It is currently {temp:F1}°F and {description} in {cityName}.";
+            return sb.ToString().TrimEnd();
         }
     }
 }

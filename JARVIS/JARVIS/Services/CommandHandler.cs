@@ -126,7 +126,24 @@ namespace JARVIS.Services
                 return true;
             }
 
-            if (input.Contains("weather") || input.Contains("forecast") || input.Contains("outside"))
+            // WEATHER SELECTORS
+            if (input.Contains("weather") && input.Contains("tomorrow"))
+            {
+                var date = DateTime.Today.AddDays(1);
+                var weather = await _weatherCollector.GetForecastByDateAsync(date);
+                _personaController.AdjustMoodBasedOnWeather(weather);
+                _synthesizer.Speak(weather);
+                return true;
+            }
+            else if (input.Contains("weather") && input.Contains("week"))
+            {
+                var weather = _weatherCollector.GetWeeklyForecastAsync().Result;
+                _personaController.AdjustMoodBasedOnWeather(weather);
+                _synthesizer.Speak(weather);
+                return true;
+            }
+
+            else if (input.Contains("weather") || input.Contains("forecast") || input.Contains("outside"))
             {
                 var weather = _weatherCollector.GetWeatherAsync().Result;
                 _personaController.AdjustMoodBasedOnWeather(weather);
