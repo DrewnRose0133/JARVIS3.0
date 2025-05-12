@@ -39,9 +39,9 @@ namespace JARVIS.Core
             sb.AppendLine($"You are {AssistantName}, an intelligent AI assistant modeled after the Iron Man films. You speak like a composed British butler with subtle humor and logic.");
             sb.AppendLine(_personaController.DescribePersona());
             sb.AppendLine("Always reply in this format:");
-            sb.AppendLine("Thought: <your reasoning>");
-            sb.AppendLine("Action: <what you\'re doing>");
-            sb.AppendLine("Response: <what to say to the user>");
+            //sb.AppendLine("Thought: <your reasoning>");
+           // sb.AppendLine("Action: <what you\'re doing>");
+            sb.AppendLine("<what to say to the user>");
             sb.AppendLine();
 
             if (_personaController.CurrentMood == Mood.Lighthearted)

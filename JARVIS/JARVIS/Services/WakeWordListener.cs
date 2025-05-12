@@ -24,7 +24,7 @@ namespace JARVIS.Services
     /// <summary>
     /// Hosted service that listens for a wake word or console command,
     /// handles authentication, and switches to active recognition.
-    /// Includes idle timeout to return to sleep mode.
+    /// Includes idle timeout, speaker validation, and command echo.
     /// </summary>
     public class WakeWordListener : BackgroundService
     {
@@ -42,6 +42,9 @@ namespace JARVIS.Services
         private readonly CommandHandler _commandHandler;
         private readonly ConversationEngine _conversationEngine;
         private readonly ILogger<WakeWordListener> _logger;
+
+        // Track the authorized user after wake authentication
+        private string _authorizedUserId;
 
         public WakeWordListener(
             VoiceAuthenticator voiceAuth,
@@ -69,7 +72,6 @@ namespace JARVIS.Services
             _conversationEngine = conversationEngine;
             _logger = logger;
 
-            // configure idle timeout
             _sleepTimeoutMs = options.Value.SleepTimeoutSeconds * 1000;
             _idleTimer = new System.Timers.Timer(_sleepTimeoutMs) { AutoReset = false };
             _idleTimer.Elapsed += (s, e) =>
@@ -77,6 +79,7 @@ namespace JARVIS.Services
                 Console.WriteLine("[WakeWordListener] Idle timeout reached. Returning to sleep.");
                 _synthesizer.Speak("Going back to sleep.");
                 try { _activeRecognizer.RecognizeAsyncCancel(); } catch { }
+                _authorizedUserId = null;
                 StartWakeRecognition();
             };
         }
@@ -90,6 +93,8 @@ namespace JARVIS.Services
 
         private void StartWakeRecognition()
         {
+            // Clear previous authorization when going back to wake mode
+            _authorizedUserId = null;
             _wakeBuffer.StartBuffering();
 
             _wakeRecognizer?.Dispose();
@@ -97,8 +102,7 @@ namespace JARVIS.Services
             _wakeRecognizer.SetInputToDefaultAudioDevice();
 
             var choices = new Choices(new[] { _wakeWord });
-            var gb = new GrammarBuilder(choices);
-            var grammar = new Grammar(gb);
+            var grammar = new Grammar(new GrammarBuilder(choices));
 
             _wakeRecognizer.LoadGrammar(grammar);
             _wakeRecognizer.SpeechRecognized += OnWakeRecognized;
@@ -109,17 +113,26 @@ namespace JARVIS.Services
 
         private void StartConsoleWakeListener()
         {
-            Task.Run(() =>
+            Task.Run(async () =>
             {
-                Console.WriteLine("[WakeWordListener] Console wake enabled. Type the wake word to activate.");
+                Console.WriteLine("[WakeWordListener] Console input enabled. Type commands anytime.");
                 while (true)
                 {
-                    var line = Console.ReadLine()?.Trim().ToLowerInvariant();
-                    if (line == _wakeWord)
-                    {
-                        Console.WriteLine("[WakeWordListener] Console wake phrase detected.");
-                        ProcessWake();
-                    }
+                    Console.Write("> ");
+                    var line = Console.ReadLine()?.Trim();
+                    if (string.IsNullOrWhiteSpace(line))
+                        continue;
+
+                    Console.WriteLine($"> Typed command: \"{line}\"");
+                    bool handled = await _commandHandler.Handle(line);
+                    string response = handled
+                        ? "Command executed."
+                        : await _conversationEngine.ProcessAsync(line);
+
+                    Console.WriteLine($"[JARVIS] → {response}");
+                    _synthesizer.Speak(response);
+                    _idleTimer.Stop();
+                    _idleTimer.Start();
                 }
             });
         }
@@ -135,70 +148,50 @@ namespace JARVIS.Services
 
         private void ProcessWake()
         {
-            // stop wake-word recognizer
             try { _wakeRecognizer.RecognizeAsyncStop(); } catch { }
             _wakeRecognizer?.Dispose();
 
-            // capture audio
             _wakeBuffer.StopBuffering();
             var wavPath = Path.Combine(AppContext.BaseDirectory, "wake_word.wav");
             _wakeBuffer.SaveBufferedAudio(wavPath);
 
-            // log WAV file info
-            try
-            {
-                var fi = new FileInfo(wavPath);
-                Console.WriteLine($"[WakeWordListener] Saved wake-word WAV to {wavPath} ({fi.Length} bytes).");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"[WakeWordListener] ERROR reading WAV file: {ex}");
-            }
-
-            // perform authentication
+            // authenticate wake
             string raw = null;
             try
             {
                 raw = _voiceAuth.IdentifyUserFromWav(wavPath);
-                Console.WriteLine($"[WakeWordListener] Raw voice-auth result: '{raw}'");
+                Console.WriteLine($"[WakeWordListener] Raw auth: '{raw}'");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"[WakeWordListener] Exception in IdentifyUserFromWav: {ex}");
+                Console.WriteLine($"[WakeWordListener] Auth error: {ex}");
                 _synthesizer.Speak("Authentication error.");
                 StartWakeRecognition();
                 return;
             }
 
-            // split into lines and log them
             var lines = (raw ?? string.Empty)
                 .Split('\n', StringSplitOptions.RemoveEmptyEntries)
                 .Select(l => l.Trim())
                 .ToArray();
-            foreach (var line in lines)
-                Console.WriteLine($"  → auth line: '{line}'");
-
-            // parse userId (support plain username without 'user:' prefix)
-            string userId;
             var userLine = lines.FirstOrDefault(l => l.StartsWith("user:", StringComparison.OrdinalIgnoreCase));
-            if (!string.IsNullOrEmpty(userLine))
-                userId = userLine.Split(':', 2)[1].Trim().ToLowerInvariant();
-            else
-                userId = lines.LastOrDefault(l => !l.Contains(":"))?.Trim().ToLowerInvariant() ?? "unknown";
+            string userId = !string.IsNullOrEmpty(userLine)
+                ? userLine.Split(':', 2)[1].Trim().ToLowerInvariant()
+                : lines.LastOrDefault(l => !l.Contains(':'))?.Trim().ToLowerInvariant() ?? "unknown";
 
-            // permission check
-            var permissionLevel = _permissionManager.GetPermission(userId);
-            UserSessionManager.Authenticate(userId, permissionLevel);
-
-            if (userId == "unknown" || permissionLevel == PermissionLevel.Guest)
+            var perm = _permissionManager.GetPermission(userId);
+            UserSessionManager.Authenticate(userId, perm);
+            if (userId == "unknown" || perm == PermissionLevel.Guest)
             {
-                Console.WriteLine($"[WakeWordListener] Voice authentication failed. user='{userId}', perm={permissionLevel}");
-                _synthesizer.Speak("Access denied. Please try again.");
+                Console.WriteLine($"[WakeWordListener] Auth failed. user='{userId}', perm={perm}");
+                _synthesizer.Speak("Access denied.");
                 StartWakeRecognition();
                 return;
             }
 
-            Console.WriteLine($"[WakeWordListener] Voice authentication succeeded. user='{userId}', perm={permissionLevel}");
+            // store authorized user
+            _authorizedUserId = userId;
+            Console.WriteLine($"[WakeWordListener] Auth succeeded. user='{userId}', perm={perm}");
             _synthesizer.Speak(_personaController.GetPreamble());
 
             // begin active recognition
@@ -211,30 +204,41 @@ namespace JARVIS.Services
 
                 _activeRecognizer.SpeechRecognized += async (s, args) =>
                 {
-                    // reset idle timeout
-                    _idleTimer.Stop();
-                    _idleTimer.Start();
-
                     var text = args.Result?.Text?.Trim();
-                    Console.WriteLine($"[WakeWordListener] Heard: {text}");
+                    Console.WriteLine($"> Command received: \"{text}\"");
                     if (string.IsNullOrWhiteSpace(text)) return;
 
+                    // 1) grab the raw audio you just spoke
+                    _wakeBuffer.StopBuffering();
+                    var cmdPath = Path.Combine(AppContext.BaseDirectory, "command.wav");
+                    _wakeBuffer.SaveBufferedAudio(cmdPath);
+                    _wakeBuffer.StartBuffering();  // immediately start buffering the next input
+
+                    // 2) re-authenticate the speaker against that WAV
+                    string authRaw = _voiceAuth.IdentifyUserFromWav(cmdPath);
+                    var authUser = authRaw
+                        .Split('\n', StringSplitOptions.RemoveEmptyEntries)
+                        .Last().Trim().ToLowerInvariant();
+                    if (authUser != _authorizedUserId)
+                    {
+                        Console.WriteLine("[WakeWordListener] Speaker mismatch, ignoring command.");
+                        return;
+                    }
+
+                    // 3) now handle the command
+                    _idleTimer.Stop();
                     bool handled = await _commandHandler.Handle(text);
-                    string response;
-                    if (handled)
-                    {
-                        response = "Command executed.";
-                    }
-                    else
-                    {
-                        _conversationEngine.AddUserMessage(text);
-                        response = await _conversationEngine.ProcessAsync(text);
-                        _conversationEngine.AddAssistantMessage(response);
-                    }
+                    string response = handled
+                        ? "Command executed."
+                        : await _conversationEngine.ProcessAsync(text);
 
                     Console.WriteLine($"[JARVIS] → {response}");
                     _synthesizer.Speak(response);
+
+                    // 4) restart idle timer
+                    _idleTimer.Start();
                 };
+
 
                 _activeRecognizer.SpeechRecognitionRejected += (s, args) =>
                     Console.WriteLine("[WakeWordListener] No speech matched.");
