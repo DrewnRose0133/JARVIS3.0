@@ -1,12 +1,15 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Globalization;
 using System.Speech.Recognition;
 using System.Speech.Synthesis;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Timers;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using JARVIS.Python;
 using JARVIS.UserSettings;
 using JARVIS.Controllers;
@@ -21,9 +24,12 @@ namespace JARVIS.Services
     /// <summary>
     /// Hosted service that listens for a wake word or console command,
     /// handles authentication, and switches to active recognition.
+    /// Includes idle timeout to return to sleep mode.
     /// </summary>
     public class WakeWordListener : BackgroundService
     {
+        private readonly System.Timers.Timer _idleTimer;
+        private readonly int _sleepTimeoutMs;
         private readonly string _wakeWord;
         private SpeechRecognitionEngine _wakeRecognizer;
         private readonly WakeAudioBuffer _wakeBuffer;
@@ -34,8 +40,8 @@ namespace JARVIS.Services
         private readonly VisualizerSocketServer _visualizerServer;
         private readonly SpeechRecognitionEngine _activeRecognizer;
         private readonly CommandHandler _commandHandler;
-        private readonly ILogger<WakeWordListener> _logger;
         private readonly ConversationEngine _conversationEngine;
+        private readonly ILogger<WakeWordListener> _logger;
 
         public WakeWordListener(
             VoiceAuthenticator voiceAuth,
@@ -48,6 +54,7 @@ namespace JARVIS.Services
             CommandHandler commandHandler,
             ConversationEngine conversationEngine,
             ILogger<WakeWordListener> logger,
+            IOptions<AppSettings> options,
             string wakeWord = "hey jarvis you there")
         {
             _wakeWord = wakeWord.ToLowerInvariant();
@@ -61,11 +68,21 @@ namespace JARVIS.Services
             _commandHandler = commandHandler;
             _conversationEngine = conversationEngine;
             _logger = logger;
+
+            // configure idle timeout
+            _sleepTimeoutMs = options.Value.SleepTimeoutSeconds * 1000;
+            _idleTimer = new System.Timers.Timer(_sleepTimeoutMs) { AutoReset = false };
+            _idleTimer.Elapsed += (s, e) =>
+            {
+                Console.WriteLine("[WakeWordListener] Idle timeout reached. Returning to sleep.");
+                _synthesizer.Speak("Going back to sleep.");
+                try { _activeRecognizer.RecognizeAsyncCancel(); } catch { }
+                StartWakeRecognition();
+            };
         }
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            // Start both wake-listening methods
             StartWakeRecognition();
             StartConsoleWakeListener();
             return Task.CompletedTask;
@@ -75,6 +92,7 @@ namespace JARVIS.Services
         {
             _wakeBuffer.StartBuffering();
 
+            _wakeRecognizer?.Dispose();
             _wakeRecognizer = new SpeechRecognitionEngine(CultureInfo.CurrentCulture);
             _wakeRecognizer.SetInputToDefaultAudioDevice();
 
@@ -86,7 +104,6 @@ namespace JARVIS.Services
             _wakeRecognizer.SpeechRecognized += OnWakeRecognized;
             _wakeRecognizer.RecognizeAsync(RecognizeMode.Multiple);
 
-            //_logger.LogInformation("[WakeWordListener] Listening for wake word...");
             Console.WriteLine("[WakeWordListener] Listening for wake word...");
         }
 
@@ -94,14 +111,12 @@ namespace JARVIS.Services
         {
             Task.Run(() =>
             {
-                //_logger.LogInformation("[WakeWordListener] Console wake enabled. Type the wake word to activate.");
                 Console.WriteLine("[WakeWordListener] Console wake enabled. Type the wake word to activate.");
                 while (true)
                 {
                     var line = Console.ReadLine()?.Trim().ToLowerInvariant();
                     if (line == _wakeWord)
                     {
-                        //_logger.LogInformation("[WakeWordListener] Console wake phrase detected.");
                         Console.WriteLine("[WakeWordListener] Console wake phrase detected.");
                         ProcessWake();
                     }
@@ -113,45 +128,80 @@ namespace JARVIS.Services
         {
             if (!e.Result.Text.ToLowerInvariant().Contains(_wakeWord))
                 return;
-            //_logger.LogInformation("[WakeWordListener] Wake word detected via voice.");
+
             Console.WriteLine("[WakeWordListener] Wake word detected via voice.");
             ProcessWake();
         }
 
         private void ProcessWake()
         {
-            // Stop further wake-word recognition
+            // stop wake-word recognizer
             try { _wakeRecognizer.RecognizeAsyncStop(); } catch { }
             _wakeRecognizer?.Dispose();
 
-            // Stop and save buffered audio
+            // capture audio
             _wakeBuffer.StopBuffering();
             var wavPath = Path.Combine(AppContext.BaseDirectory, "wake_word.wav");
             _wakeBuffer.SaveBufferedAudio(wavPath);
 
-            // Authenticate user
-            var raw = _voiceAuth.IdentifyUserFromWav(wavPath);
-            _logger.LogDebug("[WakeWordListener] Raw voice-auth result: {Raw}", raw);
-            var userId = raw.Split('\n').Last().Trim().ToLowerInvariant();
+            // log WAV file info
+            try
+            {
+                var fi = new FileInfo(wavPath);
+                Console.WriteLine($"[WakeWordListener] Saved wake-word WAV to {wavPath} ({fi.Length} bytes).");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[WakeWordListener] ERROR reading WAV file: {ex}");
+            }
+
+            // perform authentication
+            string raw = null;
+            try
+            {
+                raw = _voiceAuth.IdentifyUserFromWav(wavPath);
+                Console.WriteLine($"[WakeWordListener] Raw voice-auth result: '{raw}'");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[WakeWordListener] Exception in IdentifyUserFromWav: {ex}");
+                _synthesizer.Speak("Authentication error.");
+                StartWakeRecognition();
+                return;
+            }
+
+            // split into lines and log them
+            var lines = (raw ?? string.Empty)
+                .Split('\n', StringSplitOptions.RemoveEmptyEntries)
+                .Select(l => l.Trim())
+                .ToArray();
+            foreach (var line in lines)
+                Console.WriteLine($"  → auth line: '{line}'");
+
+            // parse userId (support plain username without 'user:' prefix)
+            string userId;
+            var userLine = lines.FirstOrDefault(l => l.StartsWith("user:", StringComparison.OrdinalIgnoreCase));
+            if (!string.IsNullOrEmpty(userLine))
+                userId = userLine.Split(':', 2)[1].Trim().ToLowerInvariant();
+            else
+                userId = lines.LastOrDefault(l => !l.Contains(":"))?.Trim().ToLowerInvariant() ?? "unknown";
+
+            // permission check
             var permissionLevel = _permissionManager.GetPermission(userId);
             UserSessionManager.Authenticate(userId, permissionLevel);
 
             if (userId == "unknown" || permissionLevel == PermissionLevel.Guest)
             {
-                //_logger.LogWarning("Voice authentication failed. User: {UserId}, Permission: {Permission}", userId, permissionLevel);
-                Console.WriteLine("Voice authentication failed. User: {UserId}, Permission: {Permission}", userId, permissionLevel);
-                _synthesizer.Speak("Access denied. Please authenticate.");
-                // Restart wake recognition
+                Console.WriteLine($"[WakeWordListener] Voice authentication failed. user='{userId}', perm={permissionLevel}");
+                _synthesizer.Speak("Access denied. Please try again.");
                 StartWakeRecognition();
                 return;
             }
 
-           // _logger.LogInformation("Voice authentication succeeded. User: {UserId}, Permission: {Permission}", userId, permissionLevel);
-            //Console.WriteLine("Voice authentication succeeded. User: {UserId}, Permission: {Permission}", userId, permissionLevel);
-            Console.WriteLine($"Voice authentication succeeded. UserId: {userId}, Permission: {permissionLevel}");
+            Console.WriteLine($"[WakeWordListener] Voice authentication succeeded. user='{userId}', perm={permissionLevel}");
             _synthesizer.Speak(_personaController.GetPreamble());
 
-            // --- Begin active recognition ---
+            // begin active recognition
             _visualizerServer.Broadcast("Listening");
             try
             {
@@ -161,6 +211,10 @@ namespace JARVIS.Services
 
                 _activeRecognizer.SpeechRecognized += async (s, args) =>
                 {
+                    // reset idle timeout
+                    _idleTimer.Stop();
+                    _idleTimer.Start();
+
                     var text = args.Result?.Text?.Trim();
                     Console.WriteLine($"[WakeWordListener] Heard: {text}");
                     if (string.IsNullOrWhiteSpace(text)) return;
@@ -173,11 +227,8 @@ namespace JARVIS.Services
                     }
                     else
                     {
-                        // <-- here’s your conversation fallback
                         _conversationEngine.AddUserMessage(text);
-                        response = _conversationEngine.BuildPrompt();               // build the prompt
-                                                                                    // you'd then POST that prompt via your PromptEngine, e.g.:
-                        response = await _conversationEngine.ProcessAsync(text);    // assume you've added this
+                        response = await _conversationEngine.ProcessAsync(text);
                         _conversationEngine.AddAssistantMessage(response);
                     }
 
@@ -189,13 +240,13 @@ namespace JARVIS.Services
                     Console.WriteLine("[WakeWordListener] No speech matched.");
 
                 _activeRecognizer.RecognizeAsync(RecognizeMode.Multiple);
+                _idleTimer.Stop();
+                _idleTimer.Start();
             }
             catch (InvalidOperationException ex)
             {
                 _logger.LogDebug(ex, "Active recognizer already running.");
             }
-            // --- End active recognition ---
-
         }
     }
 }

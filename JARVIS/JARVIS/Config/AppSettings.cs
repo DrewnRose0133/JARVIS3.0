@@ -26,6 +26,7 @@ namespace JARVIS.Config
         /// Nested music-related settings
         /// </summary>
         public MusicSettings Music { get; set; }
+
     }
 
     /// <summary>

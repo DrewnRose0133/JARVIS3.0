@@ -97,7 +97,7 @@ namespace JARVIS.Services
             services.AddHostedService<WakeWordListener>();
             services.AddSingleton<SpeechSynthesizer>();
             services.AddHostedService<StartupHostedService>();
-            services.AddHostedService<InteractionLoopBackgroundService>();
+            //services.AddHostedService<InteractionLoopBackgroundService>();
             services.AddSingleton<VoiceAuthenticator>();
             services.AddSingleton<IBeatDetector, BeatDetector>();
             services.AddSingleton<ILightsService, MqttLightsService>();
