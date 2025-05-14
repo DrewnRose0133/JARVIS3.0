@@ -205,7 +205,7 @@ namespace JARVIS.Services
                 _activeRecognizer.SpeechRecognized += async (s, args) =>
                 {
                     var text = args.Result?.Text?.Trim();
-                    Console.WriteLine($"> Command received: \"{text}\"");
+                    Console.WriteLine($"> Command received: {text}");
                     if (string.IsNullOrWhiteSpace(text)) return;
 
                     // 1) grab the raw audio you just spoke

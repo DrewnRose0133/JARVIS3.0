@@ -6,6 +6,8 @@ using JARVIS.Memory;
 using JARVIS.UserSettings;
 using JARVIS.Audio;
 using JARVIS.Services;
+using JARVIS.Devices.Interfaces;
+using SpotifyAPI.Web.Http;
 
 namespace JARVIS.Services
 {
@@ -21,6 +23,7 @@ namespace JARVIS.Services
         private readonly StatusReporter _statusReporter;
         private readonly DJModeManager _djModeManager;
         private readonly UserPermissionManager _userPermissionManager;
+        private readonly ISmartThingsService _smartThingsService;
 
         public CommandHandler(
             PersonaController personaController,           
@@ -32,6 +35,7 @@ namespace JARVIS.Services
             StatusReporter statusReporter,
             DJModeManager djModeManager,
             UserPermissionManager userPermissionManager,
+            ISmartThingsService smartThingsService,
             string city)
         {
             _personaController = personaController;            
@@ -44,6 +48,7 @@ namespace JARVIS.Services
             _statusReporter = statusReporter;
             _djModeManager = djModeManager;
             _userPermissionManager = userPermissionManager;
+            _smartThingsService = smartThingsService;
 
         }
 
@@ -57,6 +62,35 @@ namespace JARVIS.Services
 
 
             // Commands go below here
+
+            // Smart Things Controls
+            if ((input.StartsWith("turn on ") || input.StartsWith("turn off ") && input.Contains("big one")))
+            {
+                var on = input.StartsWith("turn on ");
+                var device = input.Substring(on ? 8 : 9).Trim(); // label after command
+                var ok = on
+                    ? await _smartThingsService.TurnOnAsync(device)
+                    : await _smartThingsService.TurnOffAsync(device);
+                if (ok)
+                {
+                    Console.WriteLine($"JARVIS: turned off {device}.");
+                    _voiceStyle.ApplyStyle(_synthesizer);
+                    _synthesizer.Speak($"Turned off {device}, sir.");
+                }
+                else
+                {
+                    Console.WriteLine($"JARVIS: turned off {device}.");
+                    _voiceStyle.ApplyStyle(_synthesizer);
+                    _synthesizer.Speak($"Turned off {device}, sir.");
+                }
+
+                return true;
+            }
+
+
+
+            // End Smart Things Controls
+
 
 
             if (UserSessionManager.CurrentPermission != PermissionLevel.Admin)

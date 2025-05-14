@@ -13,6 +13,7 @@ using JARVIS.Python;
 using JARVIS.Devices.Interfaces;
 using JARVIS.Devices;
 using System.Configuration;
+using System.Net.Http.Headers;
 
 namespace JARVIS.Services
 {
@@ -73,10 +74,20 @@ namespace JARVIS.Services
                 var beatDetector = sp.GetRequiredService<IBeatDetector>();
                 return new DJModeManager(options, lightsSvc, beatDetector);
             });
+            services.Configure<SmartThingsSettings>(config.GetSection("SmartThings"));
 
-           
+            services.AddHttpClient<SmartThingsService>((sp, client) =>
+            {
+                var settings = sp.GetRequiredService<IOptions<SmartThingsSettings>>().Value;
+                client.BaseAddress = new Uri("https://api.smartthings.com/v1/");
+                client.DefaultRequestHeaders.Authorization =
+                    new AuthenticationHeaderValue("Bearer", settings.PersonalAccessToken);
+                client.DefaultRequestHeaders.Accept.Add(
+                    new MediaTypeWithQualityHeaderValue("application/json"));
+            });
 
-            
+
+
             services.AddSingleton<ConversationEngine>();
             services.AddSingleton<AudioEngine>();
             services.AddSingleton<SmartHomeController>();
@@ -98,6 +109,7 @@ namespace JARVIS.Services
             services.AddSingleton<ILightsService, MqttLightsService>();
             services.AddSingleton<PromptSettings>();            
             services.AddSingleton<ConversationEngine>();
+            services.AddSingleton<ISmartThingsService, SmartThingsService>();
 
             services.AddHttpClient<PromptEngine>((sp, client) =>
             {
@@ -125,6 +137,7 @@ namespace JARVIS.Services
                     sp.GetRequiredService<StatusReporter>(),
                     sp.GetRequiredService<DJModeManager>(),
                     sp.GetRequiredService<UserPermissionManager>(),
+                    sp.GetRequiredService<SmartThingsService>(),
                     opts.CityName
                 );
             });
