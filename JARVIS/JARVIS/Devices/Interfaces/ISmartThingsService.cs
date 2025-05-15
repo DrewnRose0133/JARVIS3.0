@@ -11,6 +11,8 @@ namespace JARVIS.Devices.Interfaces
         Task<bool> TurnOnAsync(string deviceName);
         Task<bool> TurnOffAsync(string deviceName);
         Task<bool> SetThermostatAsync(string deviceName, double temperature);
+        Task<bool> LaunchAppAsync(string deviceName, string appName);
+        Task<bool> MediaCommandAsync(string deviceName, string command); // play/pause/etc.
     }
 
     public class SmartThingsService : ISmartThingsService
@@ -22,6 +24,7 @@ namespace JARVIS.Devices.Interfaces
         private async Task<string?> LookupDeviceId(string label)
         {
             var resp = await _http.GetAsync("devices");
+            
             resp.EnsureSuccessStatusCode();
             using var doc = JsonDocument.Parse(await resp.Content.ReadAsStringAsync());
             foreach (var dev in doc.RootElement.GetProperty("items").EnumerateArray())
@@ -96,6 +99,46 @@ namespace JARVIS.Devices.Interfaces
             };
             var resp = await _http.PostAsJsonAsync($"devices/{id}/commands", cmd);
             return resp.IsSuccessStatusCode;
+        }
+
+        public async Task<bool> LaunchAppAsync(string deviceName, string appName)
+        {
+            var id = await LookupDeviceId(deviceName);
+            if (id == null) return false;
+
+            var cmd = new
+            {
+                commands = new[] {
+                new {
+                    component  = "main",
+                    capability = "mediaInputSource",
+                    command    = "setMediaInputSource",
+                    arguments  = new[] { appName }
+                }
+            }
+            };
+            var r = await _http.PostAsJsonAsync($"devices/{id}/commands", cmd);
+            return r.IsSuccessStatusCode;
+        }
+
+        public async Task<bool> MediaCommandAsync(string deviceName, string command)
+        {
+            var id = await LookupDeviceId(deviceName);
+            if (id == null) return false;
+
+            var cmd = new
+            {
+                commands = new[] {
+                new {
+                    component  = "main",
+                    capability = "mediaPlayback",
+                    command    = command,
+                    arguments  = Array.Empty<object>()
+                }
+            }
+            };
+            var r = await _http.PostAsJsonAsync($"devices/{id}/commands", cmd);
+            return r.IsSuccessStatusCode;
         }
     }
 }

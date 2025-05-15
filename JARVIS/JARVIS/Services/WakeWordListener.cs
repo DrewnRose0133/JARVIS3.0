@@ -18,6 +18,7 @@ using JARVIS.Config;
 using JARVIS.Devices.Interfaces;
 using JARVIS.Audio;
 using JARVIS.Core;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace JARVIS.Services
 {
@@ -124,10 +125,13 @@ namespace JARVIS.Services
                         continue;
 
                     Console.WriteLine($"> Typed command: \"{line}\"");
-                    bool handled = await _commandHandler.Handle(line);
-                    string response = handled
-                        ? ""
-                        : await _conversationEngine.ProcessAsync(line);
+                    //  bool handled = await _commandHandler.Handle(line);
+                    var response = await _commandHandler.HandleAsync(line);
+                    if (!string.IsNullOrEmpty(response))
+                    {
+                        Console.WriteLine($"[JARVIS] → {response}");
+                        _synthesizer.Speak(response);
+                    }
 
                     Console.WriteLine($"[JARVIS] → {response}");
                     _synthesizer.Speak(response);
@@ -227,13 +231,16 @@ namespace JARVIS.Services
 
                     // 3) now handle the command
                     _idleTimer.Stop();
-                    bool handled = await _commandHandler.Handle(text);
-                    string response = handled
-                        ? ""
-                        : await _conversationEngine.ProcessAsync(text);
+                   // bool handled = await _commandHandler.Handle(text);
+                    var response = await _commandHandler.HandleAsync(text);
+                    if (!string.IsNullOrEmpty(response))
+                    {
+                        Console.WriteLine($"[JARVIS] → {response}");
+                        _synthesizer.Speak(response);
+                    }
 
                     Console.WriteLine($"[JARVIS] → {response}");
-                    _synthesizer.Speak(response);
+                   // _synthesizer.Speak(response);
 
                     // 4) restart idle timer
                     _idleTimer.Start();

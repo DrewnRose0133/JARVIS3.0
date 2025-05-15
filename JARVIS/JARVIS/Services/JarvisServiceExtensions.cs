@@ -14,6 +14,7 @@ using JARVIS.Devices.Interfaces;
 using JARVIS.Devices;
 using System.Configuration;
 using System.Net.Http.Headers;
+using JARVIS.Devices.CommandHandlers;
 
 namespace JARVIS.Services
 {
@@ -74,17 +75,17 @@ namespace JARVIS.Services
                 var beatDetector = sp.GetRequiredService<IBeatDetector>();
                 return new DJModeManager(options, lightsSvc, beatDetector);
             });
+
+
             services.Configure<SmartThingsSettings>(config.GetSection("SmartThings"));
 
-            services.AddHttpClient<SmartThingsService>((sp, client) =>
-            {
+            services.AddHttpClient<ISmartThingsService, SmartThingsService>((sp, client) => {
                 var settings = sp.GetRequiredService<IOptions<SmartThingsSettings>>().Value;
                 client.BaseAddress = new Uri("https://api.smartthings.com/v1/");
                 client.DefaultRequestHeaders.Authorization =
                     new AuthenticationHeaderValue("Bearer", settings.PersonalAccessToken);
-                client.DefaultRequestHeaders.Accept.Add(
-                    new MediaTypeWithQualityHeaderValue("application/json"));
             });
+
 
 
 
@@ -109,7 +110,11 @@ namespace JARVIS.Services
             services.AddSingleton<ILightsService, MqttLightsService>();
             services.AddSingleton<PromptSettings>();            
             services.AddSingleton<ConversationEngine>();
-            services.AddSingleton<ISmartThingsService, SmartThingsService>();
+           // services.AddSingleton<ISmartThingsService, SmartThingsService>();
+            services.AddSingleton<ICommandHandler, LightsCommandHandler>();
+            services.AddSingleton<ICommandHandler, ElectronicsCommandHandler>();
+
+            services.AddSingleton<CommandHandler>();
 
             services.AddHttpClient<PromptEngine>((sp, client) =>
             {
@@ -123,7 +128,7 @@ namespace JARVIS.Services
 
 
 
-
+/**
             services.AddSingleton<CommandHandler>(sp =>
             {
                 var opts = sp.GetRequiredService<IOptions<AppSettings>>().Value;
@@ -141,7 +146,7 @@ namespace JARVIS.Services
                     opts.CityName
                 );
             });
-
+**/
             return services;
         }
     }
