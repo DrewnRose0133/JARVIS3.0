@@ -18,7 +18,7 @@ namespace JARVIS.Services
     {
 
         
-        private readonly WeatherController _weatherCollector;
+        private readonly IWeatherCollector _weatherCollector;
         private readonly PersonaController _moodController;
         private readonly SpeechSynthesizer _synthesizer;
         private readonly VisualizerSocketServer _visualizerServer;
@@ -28,8 +28,8 @@ namespace JARVIS.Services
         private readonly ILogger<StartupHostedService> _logger;
 
         public StartupHostedService(
-            IOptions<AppSettings> _opts,            
-            WeatherController weatherCollector,
+            IOptions<AppSettings> _opts,
+            IWeatherCollector weatherCollector,
             PersonaController moodController,
             SpeechSynthesizer synthesizer,
             VisualizerSocketServer visualizerServer,

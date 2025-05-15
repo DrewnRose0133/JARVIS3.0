@@ -18,7 +18,7 @@ namespace JARVIS.Core
         private readonly HttpClient _http;
         private readonly PersonaController _personaController;
         private readonly string _modelId;
-        private const string AssistantName = "J.A.R.V.I.S.";
+        private const string AssistantName = "JARVIS";
 
         public PromptEngine(
             HttpClient http,
@@ -38,7 +38,7 @@ namespace JARVIS.Core
             var sb = new StringBuilder();
             sb.AppendLine($"You are {AssistantName}, an intelligent AI assistant modeled after the Iron Man films. You speak like a composed British butler with subtle humor and logic.");
             sb.AppendLine(_personaController.DescribePersona());
-            sb.AppendLine("Always reply in this format:");
+            //sb.AppendLine("Always reply in this format:");
             //sb.AppendLine("Thought: <your reasoning>");
            // sb.AppendLine("Action: <what you\'re doing>");
             sb.AppendLine("<what to say to the user>");
@@ -101,7 +101,15 @@ namespace JARVIS.Core
                 .GetProperty("content")
                 .GetString();
 
-            return content.Trim();
+            content = content.Trim();
+            // Strip leading assistant name if present
+            if (content.StartsWith(AssistantName, StringComparison.OrdinalIgnoreCase))
+                content = content.Substring(AssistantName.Length).TrimStart(':', ' ');
+            // Strip explicit 'Response:' label
+            if (content.StartsWith("Response:", StringComparison.OrdinalIgnoreCase))
+                content = content.Substring("Response:".Length).Trim();
+
+            return content;
         }
     }
 }

@@ -219,7 +219,7 @@ namespace JARVIS.Services
                     _wakeBuffer.StartBuffering();  // immediately start buffering the next input
 
                     // 2) re-authenticate the speaker against that WAV
-                    string authRaw = _voiceAuth.IdentifyUserFromWav(cmdPath);
+                 /**   string authRaw = _voiceAuth.IdentifyUserFromWav(cmdPath);
                     var authUser = authRaw
                         .Split('\n', StringSplitOptions.RemoveEmptyEntries)
                         .Last().Trim().ToLowerInvariant();
@@ -227,7 +227,7 @@ namespace JARVIS.Services
                     {
                         Console.WriteLine("[WakeWordListener] Speaker mismatch, ignoring command.");
                         return;
-                    }
+                    } **/
 
                     // 3) now handle the command
                     _idleTimer.Stop();
@@ -238,9 +238,13 @@ namespace JARVIS.Services
                         Console.WriteLine($"[JARVIS] → {response}");
                         _synthesizer.Speak(response);
                     }
+                    else // response if the response above is null or JARVIS failed to understand the command
+                    {
+                        response = "Failed to understand the command given.";
+                        Console.WriteLine($"[JARVIS] → {response}");
+                        _synthesizer.Speak(response);
 
-                    Console.WriteLine($"[JARVIS] → {response}");
-                   // _synthesizer.Speak(response);
+                    }
 
                     // 4) restart idle timer
                     _idleTimer.Start();

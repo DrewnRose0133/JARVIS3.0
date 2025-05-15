@@ -15,6 +15,7 @@ using JARVIS.Devices;
 using System.Configuration;
 using System.Net.Http.Headers;
 using JARVIS.Devices.CommandHandlers;
+using JARVIS.Services.Handlers;
 
 namespace JARVIS.Services
 {
@@ -22,6 +23,8 @@ namespace JARVIS.Services
     {
         public static IServiceCollection AddJarvisServices(this IServiceCollection services, IConfiguration config)
         {
+            // Register core singleton services
+
             // Configure and validate LocalAI settings
             services
                 .AddOptions<LocalAISettings>()
@@ -30,14 +33,6 @@ namespace JARVIS.Services
                 .Validate(s => !string.IsNullOrWhiteSpace(s.BaseUrl), "BaseUrl is required")
                 .Validate(s => !string.IsNullOrWhiteSpace(s.ModelId), "ModelId is required")
                 .ValidateOnStart();
-
-            // right:
-            services.Configure<WeatherSettings>(config.GetSection("WeatherSettings"));
-
-            services.AddHttpClient<WeatherController>(c =>
-                c.BaseAddress = new Uri("http://api.weatherapi.com/v1/"));
-            services.AddSingleton<IWeatherCollector, WeatherController>();
-
 
             // Bind general settings
             services.Configure<AppSettings>(config);
@@ -49,8 +44,14 @@ namespace JARVIS.Services
                 return new HttpClient { BaseAddress = new Uri(settings.BaseUrl) };
             });
 
-            // Register core singleton services
-            services.AddSingleton<PersonaController>();
+            // Configure and validate Weather Controller
+            services.Configure<WeatherSettings>(config.GetSection("WeatherSettings"));
+
+            services.AddHttpClient<IWeatherCollector, WeatherController>(c =>
+            {
+                c.BaseAddress = new Uri("http://api.weatherapi.com/v1/");
+            });
+            //services.AddSingleton<IWeatherCollector, WeatherController>();
 
             services.AddSingleton<VisualizerSocketServer>(sp =>
             {
@@ -86,9 +87,7 @@ namespace JARVIS.Services
                     new AuthenticationHeaderValue("Bearer", settings.PersonalAccessToken);
             });
 
-
-
-
+            services.AddSingleton<PersonaController>();
             services.AddSingleton<ConversationEngine>();
             services.AddSingleton<AudioEngine>();
             services.AddSingleton<SmartHomeController>();
@@ -104,15 +103,23 @@ namespace JARVIS.Services
             services.AddHostedService<WakeWordListener>();
             services.AddSingleton<SpeechSynthesizer>();
             services.AddHostedService<StartupHostedService>();
-            //services.AddHostedService<InteractionLoopBackgroundService>();
             services.AddSingleton<VoiceAuthenticator>();
+            services.AddSingleton<DJModeManager>();
             services.AddSingleton<IBeatDetector, BeatDetector>();
             services.AddSingleton<ILightsService, MqttLightsService>();
             services.AddSingleton<PromptSettings>();            
             services.AddSingleton<ConversationEngine>();
-           // services.AddSingleton<ISmartThingsService, SmartThingsService>();
+            services.AddSingleton<ICommandHandler, WeatherCommandHandler>();
             services.AddSingleton<ICommandHandler, LightsCommandHandler>();
             services.AddSingleton<ICommandHandler, ElectronicsCommandHandler>();
+            services.AddSingleton<ICommandHandler, MusicCommandHandler>();
+            services.AddSingleton<ICommandHandler, StatusCommandHandler>();
+            services.AddSingleton<ICommandHandler, SceneCommandHandler>();
+
+            // Always the last ICommandHander
+            services.AddSingleton<ICommandHandler, ChatFallbackHandler>();
+            
+
 
             services.AddSingleton<CommandHandler>();
 
