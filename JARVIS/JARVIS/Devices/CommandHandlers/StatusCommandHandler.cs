@@ -1,7 +1,5 @@
-﻿using System.Threading.Tasks;
-using JARVIS.Core;
+﻿using JARVIS.Core;
 using JARVIS.Devices.Interfaces;
-using JARVIS.Services.Handlers;
 
 namespace JARVIS.Services.Handlers
 {
@@ -50,7 +48,6 @@ namespace JARVIS.Services.Handlers
                 
                 return response;
             }
-
 
             return null;
         }

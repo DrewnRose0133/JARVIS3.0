@@ -1,24 +1,16 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Speech.Recognition;
 using System.Speech.Synthesis;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Timers;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using JARVIS.Python;
 using JARVIS.UserSettings;
 using JARVIS.Controllers;
-using JARVIS.Services;
 using JARVIS.Config;
-using JARVIS.Devices.Interfaces;
 using JARVIS.Audio;
 using JARVIS.Core;
-using static System.Net.Mime.MediaTypeNames;
+
 
 namespace JARVIS.Services
 {

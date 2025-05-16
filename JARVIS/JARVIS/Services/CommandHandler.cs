@@ -15,7 +15,6 @@ namespace JARVIS.Services
             // Order matters: Lights → Weather → … → ChatFallback
             _handlers = new List<ICommandHandler>(handlers);
         }
-
         public async Task<string?> HandleAsync(string input)
         {
             foreach (var h in _handlers)

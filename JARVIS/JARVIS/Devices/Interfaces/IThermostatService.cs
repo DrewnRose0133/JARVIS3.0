@@ -6,5 +6,7 @@ namespace JARVIS.Devices.Interfaces
     {
         Task SetTemperatureAsync(string zoneId, double temp);
         Task<double?> GetCurrentTemperatureAsync(string zoneId);
+        Task TurnOnHeat(double temp);
+        Task TurnOnAC(double temp);
     }
 }

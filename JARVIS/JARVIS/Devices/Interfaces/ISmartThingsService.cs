@@ -13,6 +13,9 @@ namespace JARVIS.Devices.Interfaces
         Task<bool> SetThermostatAsync(string deviceName, double temperature);
         Task<bool> LaunchAppAsync(string deviceName, string appName);
         Task<bool> MediaCommandAsync(string deviceName, string command); // play/pause/etc.
+        Task<string?> LookupDeviceIdAsync(string label);
+
+        Task<JsonDocument> GetDeviceStatusAsync(string deviceName);
     }
 
     public class SmartThingsService : ISmartThingsService
@@ -20,8 +23,9 @@ namespace JARVIS.Devices.Interfaces
         private readonly HttpClient _http;
         public SmartThingsService(HttpClient http) => _http = http;
 
+
         // helper: find deviceId by friendly label
-        private async Task<string?> LookupDeviceId(string label)
+        public async Task<string?> LookupDeviceIdAsync(string label)
         {
             var resp = await _http.GetAsync("devices");
             
@@ -40,9 +44,21 @@ namespace JARVIS.Devices.Interfaces
             return null;
         }
 
+        public async Task<JsonDocument> GetDeviceStatusAsync(string deviceName)
+        {
+            var deviceId = await LookupDeviceIdAsync(deviceName);
+            if (deviceId == null)
+                throw new InvalidOperationException($"Device '{deviceName}' not found.");
+
+            var resp = await _http.GetAsync($"/v1/devices/{deviceId}/status");
+            resp.EnsureSuccessStatusCode();
+            var json = await resp.Content.ReadAsStringAsync();
+            return JsonDocument.Parse(json);
+        }
+
         public async Task<bool> TurnOnAsync(string deviceName)
         {
-            var id = await LookupDeviceId(deviceName);
+            var id = await LookupDeviceIdAsync(deviceName);
             if (id == null) return false;
 
             var cmd = new
@@ -62,7 +78,7 @@ namespace JARVIS.Devices.Interfaces
 
         public async Task<bool> TurnOffAsync(string deviceName)
         {
-            var id = await LookupDeviceId(deviceName);
+            var id = await LookupDeviceIdAsync(deviceName);
             if (id == null) return false;
 
             var cmd = new
@@ -82,7 +98,7 @@ namespace JARVIS.Devices.Interfaces
 
         public async Task<bool> SetThermostatAsync(string deviceName, double temperature)
         {
-            var id = await LookupDeviceId(deviceName);
+            var id = await LookupDeviceIdAsync(deviceName);
             if (id == null) return false;
 
             // SmartThings thermostat capability uses "setHeatingSetpoint"
@@ -103,7 +119,7 @@ namespace JARVIS.Devices.Interfaces
 
         public async Task<bool> LaunchAppAsync(string deviceName, string appName)
         {
-            var id = await LookupDeviceId(deviceName);
+            var id = await LookupDeviceIdAsync(deviceName);
             if (id == null) return false;
 
             var cmd = new
@@ -123,7 +139,7 @@ namespace JARVIS.Devices.Interfaces
 
         public async Task<bool> MediaCommandAsync(string deviceName, string command)
         {
-            var id = await LookupDeviceId(deviceName);
+            var id = await LookupDeviceIdAsync(deviceName);
             if (id == null) return false;
 
             var cmd = new

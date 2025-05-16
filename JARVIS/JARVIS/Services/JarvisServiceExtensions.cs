@@ -12,7 +12,6 @@ using System.Speech.Recognition;
 using JARVIS.Python;
 using JARVIS.Devices.Interfaces;
 using JARVIS.Devices;
-using System.Configuration;
 using System.Net.Http.Headers;
 using JARVIS.Devices.CommandHandlers;
 using JARVIS.Services.Handlers;
@@ -109,12 +108,16 @@ namespace JARVIS.Services
             services.AddSingleton<ILightsService, MqttLightsService>();
             services.AddSingleton<PromptSettings>();            
             services.AddSingleton<ConversationEngine>();
+            services.AddSingleton<IThermostatService, SmartThingsThermostatService>();
+
+
             services.AddSingleton<ICommandHandler, WeatherCommandHandler>();
             services.AddSingleton<ICommandHandler, LightsCommandHandler>();
             services.AddSingleton<ICommandHandler, ElectronicsCommandHandler>();
             services.AddSingleton<ICommandHandler, MusicCommandHandler>();
             services.AddSingleton<ICommandHandler, StatusCommandHandler>();
             services.AddSingleton<ICommandHandler, SceneCommandHandler>();
+            
 
             // Always the last ICommandHander
             services.AddSingleton<ICommandHandler, ChatFallbackHandler>();
