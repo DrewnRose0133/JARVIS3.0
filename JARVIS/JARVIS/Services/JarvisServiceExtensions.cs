@@ -83,7 +83,7 @@ namespace JARVIS.Services
                 var settings = sp.GetRequiredService<IOptions<SmartThingsSettings>>().Value;
                 client.BaseAddress = new Uri("https://api.smartthings.com/v1/");
                 client.DefaultRequestHeaders.Authorization =
-                    new AuthenticationHeaderValue("Bearer", settings.PersonalAccessToken);
+                    new AuthenticationHeaderValue("Bearer", settings.PersonalAccessToken.Trim());
             });
 
             services.AddSingleton<PersonaController>();
