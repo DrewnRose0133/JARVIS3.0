@@ -77,14 +77,7 @@ namespace JARVIS.Services
             });
 
 
-            services.Configure<SmartThingsSettings>(config.GetSection("SmartThings"));
-
-            services.AddHttpClient<ISmartThingsService, SmartThingsService>((sp, client) => {
-                var settings = sp.GetRequiredService<IOptions<SmartThingsSettings>>().Value;
-                client.BaseAddress = new Uri("https://api.smartthings.com/v1/");
-                client.DefaultRequestHeaders.Authorization =
-                    new AuthenticationHeaderValue("Bearer", settings.PersonalAccessToken.Trim());
-            });
+       
 
             services.AddSingleton<PersonaController>();
             services.AddSingleton<ConversationEngine>();
@@ -108,12 +101,10 @@ namespace JARVIS.Services
             services.AddSingleton<ILightsService, MqttLightsService>();
             services.AddSingleton<PromptSettings>();            
             services.AddSingleton<ConversationEngine>();
-            services.AddSingleton<IThermostatService, SmartThingsThermostatService>();
 
 
             services.AddSingleton<ICommandHandler, WeatherCommandHandler>();
             services.AddSingleton<ICommandHandler, LightsCommandHandler>();
-            services.AddSingleton<ICommandHandler, ElectronicsCommandHandler>();
             services.AddSingleton<ICommandHandler, MusicCommandHandler>();
             services.AddSingleton<ICommandHandler, StatusCommandHandler>();
             services.AddSingleton<ICommandHandler, SceneCommandHandler>();
