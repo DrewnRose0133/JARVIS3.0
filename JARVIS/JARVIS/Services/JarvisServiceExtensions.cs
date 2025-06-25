@@ -15,6 +15,7 @@ using JARVIS.Devices;
 using System.Net.Http.Headers;
 using JARVIS.Devices.CommandHandlers;
 using JARVIS.Services.Handlers;
+using JARVIS.Devices.Implementations;
 
 namespace JARVIS.Services
 {
@@ -76,9 +77,6 @@ namespace JARVIS.Services
                 return new DJModeManager(options, lightsSvc, beatDetector);
             });
 
-
-       
-
             services.AddSingleton<PersonaController>();
             services.AddSingleton<ConversationEngine>();
             services.AddSingleton<AudioEngine>();
@@ -112,7 +110,20 @@ namespace JARVIS.Services
 
             // Always the last ICommandHander
             services.AddSingleton<ICommandHandler, ChatFallbackHandler>();
-            
+
+            // Services for Samsung TVs
+            services
+              .AddOptions<SamsungTvOptions>()
+              .Bind(config.GetSection("SamsungTv"))
+              .ValidateDataAnnotations();
+
+            services.AddSingleton<ISamsungTVService, SamsungTVService>();
+            services.AddTransient<ICommandHandler, SamsungTVCommandHandler>();
+
+
+            // still inside AddJarvisServices(...)
+            services.AddHostedService<SamsungTvStartupHostedService>();
+
 
 
             services.AddSingleton<CommandHandler>();

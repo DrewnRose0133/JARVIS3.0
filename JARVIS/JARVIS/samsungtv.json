@@ -1,0 +1,8 @@
+{
+    "SamsungTv": {
+        "IpAddress": "192.168.0.164",
+        "RemoteName": "JARVISv4",
+        "Port": 8002,
+        "UseSsl": true
+    }
+}

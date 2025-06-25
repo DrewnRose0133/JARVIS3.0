@@ -14,7 +14,7 @@ namespace JARVIS.Services.Handlers
         {
             _djManager = djManager ?? throw new ArgumentNullException(nameof(djManager));
             // Initialize Spotify OAuth flow on startup if needed
-            _ = SpotifyClientManager.InitializeAsync();
+            //_ = SpotifyClientManager.InitializeAsync();
         }
 
         public async Task<string?> HandleAsync(string input)

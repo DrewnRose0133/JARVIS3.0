@@ -3,48 +3,32 @@
   "WorkspaceRootPath": "C:\\Users\\Drew\\Desktop\\Repos\\JARVIS3.0\\JARVIS\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{B6D734E6-F37E-44B5-A632-70C2A5E0FEEE}|JARVIS\\JARVIS.csproj|c:\\users\\drew\\desktop\\repos\\jarvis3.0\\jarvis\\jarvis\\services\\jarvisserviceextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B6D734E6-F37E-44B5-A632-70C2A5E0FEEE}|JARVIS\\JARVIS.csproj|solutionrelative:jarvis\\services\\jarvisserviceextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{B6D734E6-F37E-44B5-A632-70C2A5E0FEEE}|JARVIS\\JARVIS.csproj|c:\\users\\drew\\desktop\\repos\\jarvis3.0\\jarvis\\jarvis\\devices\\implementations\\samsungtvservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B6D734E6-F37E-44B5-A632-70C2A5E0FEEE}|JARVIS\\JARVIS.csproj|solutionrelative:jarvis\\devices\\implementations\\samsungtvservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B6D734E6-F37E-44B5-A632-70C2A5E0FEEE}|JARVIS\\JARVIS.csproj|c:\\users\\drew\\desktop\\repos\\jarvis3.0\\jarvis\\jarvis\\devices\\interfaces\\isamsungtvservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B6D734E6-F37E-44B5-A632-70C2A5E0FEEE}|JARVIS\\JARVIS.csproj|solutionrelative:jarvis\\devices\\interfaces\\isamsungtvservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B6D734E6-F37E-44B5-A632-70C2A5E0FEEE}|JARVIS\\JARVIS.csproj|c:\\users\\drew\\desktop\\repos\\jarvis3.0\\jarvis\\jarvis\\devices\\commandhandlers\\samsungtvstartuphostedservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B6D734E6-F37E-44B5-A632-70C2A5E0FEEE}|JARVIS\\JARVIS.csproj|solutionrelative:jarvis\\devices\\commandhandlers\\samsungtvstartuphostedservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B6D734E6-F37E-44B5-A632-70C2A5E0FEEE}|JARVIS\\JARVIS.csproj|c:\\users\\drew\\desktop\\repos\\jarvis3.0\\jarvis\\jarvis\\samsungtv.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{B6D734E6-F37E-44B5-A632-70C2A5E0FEEE}|JARVIS\\JARVIS.csproj|solutionrelative:jarvis\\samsungtv.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{B6D734E6-F37E-44B5-A632-70C2A5E0FEEE}|JARVIS\\JARVIS.csproj|c:\\users\\drew\\desktop\\repos\\jarvis3.0\\jarvis\\jarvis\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{B6D734E6-F37E-44B5-A632-70C2A5E0FEEE}|JARVIS\\JARVIS.csproj|solutionrelative:jarvis\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{B6D734E6-F37E-44B5-A632-70C2A5E0FEEE}|JARVIS\\JARVIS.csproj|c:\\users\\drew\\desktop\\repos\\jarvis3.0\\jarvis\\jarvis\\services\\wakewordlistener.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B6D734E6-F37E-44B5-A632-70C2A5E0FEEE}|JARVIS\\JARVIS.csproj|solutionrelative:jarvis\\services\\wakewordlistener.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{B6D734E6-F37E-44B5-A632-70C2A5E0FEEE}|JARVIS\\JARVIS.csproj|c:\\users\\drew\\desktop\\repos\\jarvis3.0\\jarvis\\jarvis\\services\\jarvisserviceextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B6D734E6-F37E-44B5-A632-70C2A5E0FEEE}|JARVIS\\JARVIS.csproj|solutionrelative:jarvis\\services\\jarvisserviceextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{B6D734E6-F37E-44B5-A632-70C2A5E0FEEE}|JARVIS\\JARVIS.csproj|c:\\users\\drew\\desktop\\repos\\jarvis3.0\\jarvis\\jarvis\\services\\commandhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B6D734E6-F37E-44B5-A632-70C2A5E0FEEE}|JARVIS\\JARVIS.csproj|solutionrelative:jarvis\\services\\commandhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B6D734E6-F37E-44B5-A632-70C2A5E0FEEE}|JARVIS\\JARVIS.csproj|c:\\users\\drew\\desktop\\repos\\jarvis3.0\\jarvis\\jarvis\\controllers\\weathercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B6D734E6-F37E-44B5-A632-70C2A5E0FEEE}|JARVIS\\JARVIS.csproj|solutionrelative:jarvis\\controllers\\weathercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B6D734E6-F37E-44B5-A632-70C2A5E0FEEE}|JARVIS\\JARVIS.csproj|c:\\users\\drew\\desktop\\repos\\jarvis3.0\\jarvis\\jarvis\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{B6D734E6-F37E-44B5-A632-70C2A5E0FEEE}|JARVIS\\JARVIS.csproj|solutionrelative:jarvis\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B6D734E6-F37E-44B5-A632-70C2A5E0FEEE}|JARVIS\\JARVIS.csproj|c:\\users\\drew\\desktop\\repos\\jarvis3.0\\jarvis\\jarvis\\config\\weathersettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B6D734E6-F37E-44B5-A632-70C2A5E0FEEE}|JARVIS\\JARVIS.csproj|solutionrelative:jarvis\\config\\weathersettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B6D734E6-F37E-44B5-A632-70C2A5E0FEEE}|JARVIS\\JARVIS.csproj|c:\\users\\drew\\desktop\\repos\\jarvis3.0\\jarvis\\jarvis\\controllers\\personacontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B6D734E6-F37E-44B5-A632-70C2A5E0FEEE}|JARVIS\\JARVIS.csproj|solutionrelative:jarvis\\controllers\\personacontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B6D734E6-F37E-44B5-A632-70C2A5E0FEEE}|JARVIS\\JARVIS.csproj|c:\\users\\drew\\desktop\\repos\\jarvis3.0\\jarvis\\jarvis\\core\\promptengine.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B6D734E6-F37E-44B5-A632-70C2A5E0FEEE}|JARVIS\\JARVIS.csproj|solutionrelative:jarvis\\core\\promptengine.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B6D734E6-F37E-44B5-A632-70C2A5E0FEEE}|JARVIS\\JARVIS.csproj|c:\\users\\drew\\desktop\\repos\\jarvis3.0\\jarvis\\jarvis\\core\\conversationengine.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B6D734E6-F37E-44B5-A632-70C2A5E0FEEE}|JARVIS\\JARVIS.csproj|solutionrelative:jarvis\\core\\conversationengine.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B6D734E6-F37E-44B5-A632-70C2A5E0FEEE}|JARVIS\\JARVIS.csproj|c:\\users\\drew\\desktop\\repos\\jarvis3.0\\jarvis\\jarvis\\config\\appsettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B6D734E6-F37E-44B5-A632-70C2A5E0FEEE}|JARVIS\\JARVIS.csproj|solutionrelative:jarvis\\config\\appsettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{B6D734E6-F37E-44B5-A632-70C2A5E0FEEE}|JARVIS\\JARVIS.csproj|c:\\users\\drew\\desktop\\repos\\jarvis3.0\\jarvis\\jarvis\\devices\\interfaces\\samsungtvoptions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B6D734E6-F37E-44B5-A632-70C2A5E0FEEE}|JARVIS\\JARVIS.csproj|solutionrelative:jarvis\\devices\\interfaces\\samsungtvoptions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -54,144 +38,98 @@
       "DocumentGroups": [
         {
           "DockedWidth": 407,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\Drew\\Desktop\\Repos\\JARVIS3.0\\JARVIS\\JARVIS\\Program.cs",
-              "RelativeDocumentMoniker": "JARVIS\\Program.cs",
-              "ToolTip": "C:\\Users\\Drew\\Desktop\\Repos\\JARVIS3.0\\JARVIS\\JARVIS\\Program.cs",
-              "RelativeToolTip": "JARVIS\\Program.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAjAAAAAAAAAA==",
+              "Title": "ISamsungTVService.cs",
+              "DocumentMoniker": "C:\\Users\\Drew\\Desktop\\Repos\\JARVIS3.0\\JARVIS\\JARVIS\\Devices\\Interfaces\\ISamsungTVService.cs",
+              "RelativeDocumentMoniker": "JARVIS\\Devices\\Interfaces\\ISamsungTVService.cs",
+              "ToolTip": "C:\\Users\\Drew\\Desktop\\Repos\\JARVIS3.0\\JARVIS\\JARVIS\\Devices\\Interfaces\\ISamsungTVService.cs",
+              "RelativeToolTip": "JARVIS\\Devices\\Interfaces\\ISamsungTVService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABwAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-09T02:01:37.416Z",
-              "IsPinned": true
+              "WhenOpened": "2025-06-25T19:21:30.604Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "SamsungTVOptions.cs",
+              "DocumentMoniker": "C:\\Users\\Drew\\Desktop\\Repos\\JARVIS3.0\\JARVIS\\JARVIS\\Devices\\Interfaces\\SamsungTVOptions.cs",
+              "RelativeDocumentMoniker": "JARVIS\\Devices\\Interfaces\\SamsungTVOptions.cs",
+              "ToolTip": "C:\\Users\\Drew\\Desktop\\Repos\\JARVIS3.0\\JARVIS\\JARVIS\\Devices\\Interfaces\\SamsungTVOptions.cs",
+              "RelativeToolTip": "JARVIS\\Devices\\Interfaces\\SamsungTVOptions.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-25T18:02:39.634Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "JarvisServiceExtensions.cs",
-              "DocumentMoniker": "C:\\Users\\Drew\\Desktop\\Repos\\JARVIS3.0\\JARVIS\\JARVIS\\Services\\JarvisServiceExtensions.cs",
-              "RelativeDocumentMoniker": "JARVIS\\Services\\JarvisServiceExtensions.cs",
-              "ToolTip": "C:\\Users\\Drew\\Desktop\\Repos\\JARVIS3.0\\JARVIS\\JARVIS\\Services\\JarvisServiceExtensions.cs",
-              "RelativeToolTip": "JARVIS\\Services\\JarvisServiceExtensions.cs",
-              "ViewState": "AgIAAD4AAAAAAAAAAAAAwE8AAAAHAAAAAAAAAA==",
+              "Title": "SamsungTVService.cs",
+              "DocumentMoniker": "C:\\Users\\Drew\\Desktop\\Repos\\JARVIS3.0\\JARVIS\\JARVIS\\Devices\\Implementations\\SamsungTVService.cs",
+              "RelativeDocumentMoniker": "JARVIS\\Devices\\Implementations\\SamsungTVService.cs",
+              "ToolTip": "C:\\Users\\Drew\\Desktop\\Repos\\JARVIS3.0\\JARVIS\\JARVIS\\Devices\\Implementations\\SamsungTVService.cs",
+              "RelativeToolTip": "JARVIS\\Devices\\Implementations\\SamsungTVService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAALMAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-12T12:00:48.486Z",
-              "IsPinned": true,
+              "WhenOpened": "2025-06-25T17:27:51.54Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "WakeWordListener.cs",
-              "DocumentMoniker": "C:\\Users\\Drew\\Desktop\\Repos\\JARVIS3.0\\JARVIS\\JARVIS\\Services\\WakeWordListener.cs",
-              "RelativeDocumentMoniker": "JARVIS\\Services\\WakeWordListener.cs",
-              "ToolTip": "C:\\Users\\Drew\\Desktop\\Repos\\JARVIS3.0\\JARVIS\\JARVIS\\Services\\WakeWordListener.cs",
-              "RelativeToolTip": "JARVIS\\Services\\WakeWordListener.cs",
-              "ViewState": "AgIAANcAAAAAAAAAAAAjwOcAAAAVAAAAAAAAAA==",
+              "Title": "SamsungTvStartupHostedService.cs",
+              "DocumentMoniker": "C:\\Users\\Drew\\Desktop\\Repos\\JARVIS3.0\\JARVIS\\JARVIS\\Devices\\CommandHandlers\\SamsungTvStartupHostedService.cs",
+              "RelativeDocumentMoniker": "JARVIS\\Devices\\CommandHandlers\\SamsungTvStartupHostedService.cs",
+              "ToolTip": "C:\\Users\\Drew\\Desktop\\Repos\\JARVIS3.0\\JARVIS\\JARVIS\\Devices\\CommandHandlers\\SamsungTvStartupHostedService.cs",
+              "RelativeToolTip": "JARVIS\\Devices\\CommandHandlers\\SamsungTvStartupHostedService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABgAAAAlAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-12T11:46:34.889Z",
-              "IsPinned": true
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "appsettings.json",
-              "DocumentMoniker": "C:\\Users\\Drew\\Desktop\\Repos\\JARVIS3.0\\JARVIS\\JARVIS\\appsettings.json",
-              "RelativeDocumentMoniker": "JARVIS\\appsettings.json",
-              "ToolTip": "C:\\Users\\Drew\\Desktop\\Repos\\JARVIS3.0\\JARVIS\\JARVIS\\appsettings.json",
-              "RelativeToolTip": "JARVIS\\appsettings.json",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABsAAAAyAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-05-12T14:06:04.83Z",
-              "IsPinned": true
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "WeatherController.cs",
-              "DocumentMoniker": "C:\\Users\\Drew\\Desktop\\Repos\\JARVIS3.0\\JARVIS\\JARVIS\\Controllers\\WeatherController.cs",
-              "RelativeDocumentMoniker": "JARVIS\\Controllers\\WeatherController.cs",
-              "ToolTip": "C:\\Users\\Drew\\Desktop\\Repos\\JARVIS3.0\\JARVIS\\JARVIS\\Controllers\\WeatherController.cs",
-              "RelativeToolTip": "JARVIS\\Controllers\\WeatherController.cs",
-              "ViewState": "AgIAABEAAAAAAAAAAAAQwCIAAAAMAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-12T19:03:05.469Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "WeatherSettings.cs",
-              "DocumentMoniker": "C:\\Users\\Drew\\Desktop\\Repos\\JARVIS3.0\\JARVIS\\JARVIS\\Config\\WeatherSettings.cs",
-              "RelativeDocumentMoniker": "JARVIS\\Config\\WeatherSettings.cs",
-              "ToolTip": "C:\\Users\\Drew\\Desktop\\Repos\\JARVIS3.0\\JARVIS\\JARVIS\\Config\\WeatherSettings.cs",
-              "RelativeToolTip": "JARVIS\\Config\\WeatherSettings.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-12T18:59:52.646Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "PersonaController.cs",
-              "DocumentMoniker": "C:\\Users\\Drew\\Desktop\\Repos\\JARVIS3.0\\JARVIS\\JARVIS\\Controllers\\PersonaController.cs",
-              "RelativeDocumentMoniker": "JARVIS\\Controllers\\PersonaController.cs",
-              "ToolTip": "C:\\Users\\Drew\\Desktop\\Repos\\JARVIS3.0\\JARVIS\\JARVIS\\Controllers\\PersonaController.cs",
-              "RelativeToolTip": "JARVIS\\Controllers\\PersonaController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-12T18:38:07.188Z"
+              "WhenOpened": "2025-06-25T17:38:50.144Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 3,
-              "Title": "CommandHandler.cs",
-              "DocumentMoniker": "C:\\Users\\Drew\\Desktop\\Repos\\JARVIS3.0\\JARVIS\\JARVIS\\Services\\CommandHandler.cs",
-              "RelativeDocumentMoniker": "JARVIS\\Services\\CommandHandler.cs",
-              "ToolTip": "C:\\Users\\Drew\\Desktop\\Repos\\JARVIS3.0\\JARVIS\\JARVIS\\Services\\CommandHandler.cs",
-              "RelativeToolTip": "JARVIS\\Services\\CommandHandler.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAYAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-12T16:32:53.032Z"
+              "Title": "samsungtv.json",
+              "DocumentMoniker": "C:\\Users\\Drew\\Desktop\\Repos\\JARVIS3.0\\JARVIS\\JARVIS\\samsungtv.json",
+              "RelativeDocumentMoniker": "JARVIS\\samsungtv.json",
+              "ToolTip": "C:\\Users\\Drew\\Desktop\\Repos\\JARVIS3.0\\JARVIS\\JARVIS\\samsungtv.json",
+              "RelativeToolTip": "JARVIS\\samsungtv.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-06-25T17:38:12.215Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "PromptEngine.cs",
-              "DocumentMoniker": "C:\\Users\\Drew\\Desktop\\Repos\\JARVIS3.0\\JARVIS\\JARVIS\\Core\\PromptEngine.cs",
-              "RelativeDocumentMoniker": "JARVIS\\Core\\PromptEngine.cs",
-              "ToolTip": "C:\\Users\\Drew\\Desktop\\Repos\\JARVIS3.0\\JARVIS\\JARVIS\\Core\\PromptEngine.cs",
-              "RelativeToolTip": "JARVIS\\Core\\PromptEngine.cs",
-              "ViewState": "AgIAABwAAAAAAAAAAAAgwCsAAAAbAAAAAAAAAA==",
+              "DocumentIndex": 4,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\Drew\\Desktop\\Repos\\JARVIS3.0\\JARVIS\\JARVIS\\Program.cs",
+              "RelativeDocumentMoniker": "JARVIS\\Program.cs",
+              "ToolTip": "C:\\Users\\Drew\\Desktop\\Repos\\JARVIS3.0\\JARVIS\\JARVIS\\Program.cs",
+              "RelativeToolTip": "JARVIS\\Program.cs",
+              "ViewState": "AgIAACgAAAAAAAAAAAAgwCYAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-12T14:37:40.757Z"
+              "WhenOpened": "2025-06-25T17:34:15.644Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "ConversationEngine.cs",
-              "DocumentMoniker": "C:\\Users\\Drew\\Desktop\\Repos\\JARVIS3.0\\JARVIS\\JARVIS\\Core\\ConversationEngine.cs",
-              "RelativeDocumentMoniker": "JARVIS\\Core\\ConversationEngine.cs",
-              "ToolTip": "C:\\Users\\Drew\\Desktop\\Repos\\JARVIS3.0\\JARVIS\\JARVIS\\Core\\ConversationEngine.cs",
-              "RelativeToolTip": "JARVIS\\Core\\ConversationEngine.cs",
-              "ViewState": "AgIAACQAAAAAAAAAAAAowB4AAAAWAAAAAAAAAA==",
+              "DocumentIndex": 5,
+              "Title": "JarvisServiceExtensions.cs",
+              "DocumentMoniker": "C:\\Users\\Drew\\Desktop\\Repos\\JARVIS3.0\\JARVIS\\JARVIS\\Services\\JarvisServiceExtensions.cs",
+              "RelativeDocumentMoniker": "JARVIS\\Services\\JarvisServiceExtensions.cs",
+              "ToolTip": "C:\\Users\\Drew\\Desktop\\Repos\\JARVIS3.0\\JARVIS\\JARVIS\\Services\\JarvisServiceExtensions.cs",
+              "RelativeToolTip": "JARVIS\\Services\\JarvisServiceExtensions.cs",
+              "ViewState": "AgIAAFsAAAAAAAAAAAAowEEAAAAMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-12T14:34:57.6Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 10,
-              "Title": "AppSettings.cs",
-              "DocumentMoniker": "C:\\Users\\Drew\\Desktop\\Repos\\JARVIS3.0\\JARVIS\\JARVIS\\Config\\AppSettings.cs",
-              "RelativeDocumentMoniker": "JARVIS\\Config\\AppSettings.cs",
-              "ToolTip": "C:\\Users\\Drew\\Desktop\\Repos\\JARVIS3.0\\JARVIS\\JARVIS\\Config\\AppSettings.cs",
-              "RelativeToolTip": "JARVIS\\Config\\AppSettings.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABwAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-12T14:06:39.29Z"
+              "WhenOpened": "2025-06-25T17:33:37.285Z",
+              "EditorCaption": ""
             }
           ]
         }

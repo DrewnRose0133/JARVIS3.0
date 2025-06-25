@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using JARVIS.UserSettings;
 using JARVIS.Core;
 using System.Speech.Synthesis;
+using Serilog;
 
 namespace JARVIS
 {
@@ -22,26 +23,31 @@ namespace JARVIS
 
             var app = builder.Build();
 
+            Log.Logger = new LoggerConfiguration()
+            .WriteTo.Console()  // still see in console
+            .WriteTo.File("Logs/jarvis-.log", rollingInterval: RollingInterval.Day)
+            .CreateLogger();
 
             var host = Host.CreateDefaultBuilder(args)
                 .ConfigureAppConfiguration((ctx, cfg) =>
                 {
                     cfg.SetBasePath(AppContext.BaseDirectory)
-                       .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+                       .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                        .AddJsonFile("samsungtv.json", optional: false, reloadOnChange: true);
                 })
-                .ConfigureLogging(logging =>
-                {
-                    logging.ClearProviders();
-                    logging.AddConsole();
-                    logging.SetMinimumLevel(LogLevel.Information);
-                    // Example: suppress Info from WakeWordListener only
-                    logging.AddFilter("JARVIS.Services.WakeWordListener", LogLevel.Warning);
-                })
+                .UseSerilog()
+
                 .ConfigureServices((ctx, services) =>
                 {
                     services.AddJarvisServices(ctx.Configuration);
                     services.AddHostedService<JarvisHostedService>();
+
+                    var section = ctx.Configuration.GetSection("SamsungTv");
+                    var debugOpts = section.Get<SamsungTvOptions>();
+                    Console.WriteLine($"[DEBUG] SamsungTvOptions: IP={debugOpts.IpAddress}, " +
+                                      $"Port={debugOpts.Port}, Name={debugOpts.RemoteName}");
                 })
+      
                 .Build();
 
             var commandHandler = host.Services.GetRequiredService<CommandHandler>();
