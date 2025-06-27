@@ -1,40 +1,71 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
+using JARVIS.Devices.Interfaces;
 
 namespace JARVIS.Controllers
 {
     public class SmartHomeController
     {
+        private readonly ISmartThingsService _smartThingsService;
+
+        public SmartHomeController(ISmartThingsService smartThingsService)
+        {
+            _smartThingsService = smartThingsService;
+        }
+
         public async Task<string> TurnOnLightsAsync(string room)
         {
-            // Replace with actual API calls to SmartThings or MQTT server
-            Console.WriteLine($"Turning on {room} light...");
-            await Task.Delay(500); // Simulate network delay
-            return $"{room} light is now ON.";
+            var devices = await _smartThingsService.GetDevicesAsync();
+            var device = devices.FirstOrDefault(d =>
+                d.Label.Contains(room, StringComparison.OrdinalIgnoreCase) &&
+                d.Label.Contains("Light", StringComparison.OrdinalIgnoreCase));
+
+            if (device == null)
+                return $"No light found for room '{room}'.";
+
+            await _smartThingsService.SendCommandAsync(device.DeviceId, "switch", "on");
+            return $"{device.Label} is now ON.";
         }
 
         public async Task<string> TurnOffLightsAsync(string room)
         {
-            // Replace with actual API calls to SmartThings or MQTT server
-            Console.WriteLine($"Turning off {room} light...");
-            await Task.Delay(500); // Simulate network delay
-            return $"{room} light is now OFF.";
+            var devices = await _smartThingsService.GetDevicesAsync();
+            var device = devices.FirstOrDefault(d =>
+                d.Label.Contains(room, StringComparison.OrdinalIgnoreCase) &&
+                d.Label.Contains("Light", StringComparison.OrdinalIgnoreCase));
+
+            if (device == null)
+                return $"No light found for room '{room}'.";
+
+            await _smartThingsService.SendCommandAsync(device.DeviceId, "switch", "off");
+            return $"{device.Label} is now OFF.";
         }
 
         public async Task<string> OpenGarageDoorAsync()
         {
-            // Replace with actual API calls to SmartThings or MQTT server
-            Console.WriteLine("Opening the garage door...");
-            await Task.Delay(500); // Simulate network delay
-            return "Garage door is now OPEN.";
+            var devices = await _smartThingsService.GetDevicesAsync();
+            var device = devices.FirstOrDefault(d =>
+                d.Label.Contains("Garage Door", StringComparison.OrdinalIgnoreCase));
+
+            if (device == null)
+                return "No garage door device found.";
+
+            await _smartThingsService.SendCommandAsync(device.DeviceId, "garageDoorControl", "open");
+            return $"{device.Label} is now OPEN.";
         }
 
         public async Task<string> CloseGarageDoorAsync()
         {
-            // Replace with actual API calls to SmartThings or MQTT server
-            Console.WriteLine("Closing the garage door...");
-            await Task.Delay(500); // Simulate network delay
-            return "Garage door is now CLOSED.";
+            var devices = await _smartThingsService.GetDevicesAsync();
+            var device = devices.FirstOrDefault(d =>
+                d.Label.Contains("Garage Door", StringComparison.OrdinalIgnoreCase));
+
+            if (device == null)
+                return "No garage door device found.";
+
+            await _smartThingsService.SendCommandAsync(device.DeviceId, "garageDoorControl", "close");
+            return $"{device.Label} is now CLOSED.";
         }
     }
 }

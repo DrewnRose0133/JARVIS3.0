@@ -36,18 +36,6 @@ namespace JARVIS
                         .AddJsonFile("samsungtv.json", optional: false, reloadOnChange: true);
                 })
                 .UseSerilog()
-
-                .ConfigureServices((ctx, services) =>
-                {
-                    services.AddJarvisServices(ctx.Configuration);
-                    services.AddHostedService<JarvisHostedService>();
-
-                    var section = ctx.Configuration.GetSection("SamsungTv");
-                    var debugOpts = section.Get<SamsungTvOptions>();
-                    Console.WriteLine($"[DEBUG] SamsungTvOptions: IP={debugOpts.IpAddress}, " +
-                                      $"Port={debugOpts.Port}, Name={debugOpts.RemoteName}");
-                })
-      
                 .Build();
 
             var commandHandler = host.Services.GetRequiredService<CommandHandler>();

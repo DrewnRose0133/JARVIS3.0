@@ -15,7 +15,6 @@ using JARVIS.Devices;
 using System.Net.Http.Headers;
 using JARVIS.Devices.CommandHandlers;
 using JARVIS.Services.Handlers;
-using JARVIS.Devices.Implementations;
 
 namespace JARVIS.Services
 {
@@ -111,20 +110,6 @@ namespace JARVIS.Services
             // Always the last ICommandHander
             services.AddSingleton<ICommandHandler, ChatFallbackHandler>();
 
-            // Services for Samsung TVs
-            services
-              .AddOptions<SamsungTvOptions>()
-              .Bind(config.GetSection("SamsungTv"))
-              .ValidateDataAnnotations();
-
-            services.AddSingleton<ISamsungTVService, SamsungTVService>();
-            services.AddTransient<ICommandHandler, SamsungTVCommandHandler>();
-
-
-            // still inside AddJarvisServices(...)
-            services.AddHostedService<SamsungTvStartupHostedService>();
-
-
 
             services.AddSingleton<CommandHandler>();
 
@@ -135,30 +120,36 @@ namespace JARVIS.Services
             });
 
             services.AddSingleton<PersonaController>();
-            
 
-
-
-
-/**
-            services.AddSingleton<CommandHandler>(sp =>
+            services.AddSingleton<ISmartThingsService>(sp =>
             {
-                var opts = sp.GetRequiredService<IOptions<AppSettings>>().Value;
-                return new CommandHandler(
-                    sp.GetRequiredService<PersonaController>(),
-                    sp.GetRequiredService<MemoryEngine>(),
-                    sp.GetRequiredService<WeatherController>(),
-                    sp.GetRequiredService<SceneManager>(),
-                    sp.GetRequiredService<SpeechSynthesizer>(),
-                    sp.GetRequiredService<VoiceStyleController>(),
-                    sp.GetRequiredService<StatusReporter>(),
-                    sp.GetRequiredService<DJModeManager>(),
-                    sp.GetRequiredService<UserPermissionManager>(),
-                    sp.GetRequiredService<SmartThingsService>(),
-                    opts.CityName
-                );
+                                // use the named client we configured in Program.cs
+                var factory = sp.GetRequiredService<IHttpClientFactory>();
+                var client = factory.CreateClient("SmartThings");
+                                return new SmartThingsService(client);
             });
-**/
+
+
+
+            /**
+                        services.AddSingleton<CommandHandler>(sp =>
+                        {
+                            var opts = sp.GetRequiredService<IOptions<AppSettings>>().Value;
+                            return new CommandHandler(
+                                sp.GetRequiredService<PersonaController>(),
+                                sp.GetRequiredService<MemoryEngine>(),
+                                sp.GetRequiredService<WeatherController>(),
+                                sp.GetRequiredService<SceneManager>(),
+                                sp.GetRequiredService<SpeechSynthesizer>(),
+                                sp.GetRequiredService<VoiceStyleController>(),
+                                sp.GetRequiredService<StatusReporter>(),
+                                sp.GetRequiredService<DJModeManager>(),
+                                sp.GetRequiredService<UserPermissionManager>(),
+                                sp.GetRequiredService<SmartThingsService>(),
+                                opts.CityName
+                            );
+                        });
+            **/
             return services;
         }
     }

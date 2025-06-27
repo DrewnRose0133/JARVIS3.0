@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="Devices\Implementations\" />
     <Folder Include="Tools\" />
   </ItemGroup>
 
