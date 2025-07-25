@@ -23,7 +23,9 @@ namespace JARVIS.Services
         public static IServiceCollection AddJarvisServices(this IServiceCollection services, IConfiguration config)
         {
             // Register core singleton services
-
+          //  var stSection = config.GetSection("SmartThings");
+           // var stClientId = stSection["ClientId"] ?? throw new InvalidOperationException("SmartThings:ClientId not configured.");
+          //  var stClientSecret = stSection["ClientSecret"] ?? throw new InvalidOperationException("SmartThings:ClientSecret not configured.");
             // Configure and validate LocalAI settings
             services
                 .AddOptions<LocalAISettings>()
@@ -79,7 +81,7 @@ namespace JARVIS.Services
             services.AddSingleton<PersonaController>();
             services.AddSingleton<ConversationEngine>();
             services.AddSingleton<AudioEngine>();
-            services.AddSingleton<SmartHomeController>();
+         //   services.AddSingleton<SmartHomeController>();
             services.AddSingleton<MemoryEngine>();
             services.AddSingleton<StatusReporter>();
             services.AddSingleton<VisualizerSocketServer>();
@@ -105,7 +107,28 @@ namespace JARVIS.Services
             services.AddSingleton<ICommandHandler, MusicCommandHandler>();
             services.AddSingleton<ICommandHandler, StatusCommandHandler>();
             services.AddSingleton<ICommandHandler, SceneCommandHandler>();
-            
+
+
+            //services.AddSingleton(new SmartThingsOAuth(stClientId, stClientSecret));
+           // services.AddTransient<SmartThingsAuthHandler>();
+          //  services
+             //   .AddHttpClient<ISmartThingsService, SmartThingsService>(client =>
+              //  {
+               //     client.BaseAddress = new Uri("https://api.smartthings.com/v1/");
+              //  })
+               // .AddHttpMessageHandler<SmartThingsAuthHandler>();
+          //  services.AddSingleton<SmartHomeController>();
+
+            /**     services.AddSingleton<SmartThingsOAuth>();
+                 services.AddTransient<SmartThingsAuthHandler>();
+                 services
+                   .AddHttpClient<ISmartThingsService, SmartThingsService>(client =>
+                   {
+                       client.BaseAddress = new Uri("https://api.smartthings.com/v1/");
+                   })
+                   .AddHttpMessageHandler<SmartThingsAuthHandler>();
+
+                 services.AddSingleton<SmartHomeController>(); **/
 
             // Always the last ICommandHander
             services.AddSingleton<ICommandHandler, ChatFallbackHandler>();
@@ -120,14 +143,6 @@ namespace JARVIS.Services
             });
 
             services.AddSingleton<PersonaController>();
-
-            services.AddSingleton<ISmartThingsService>(sp =>
-            {
-                                // use the named client we configured in Program.cs
-                var factory = sp.GetRequiredService<IHttpClientFactory>();
-                var client = factory.CreateClient("SmartThings");
-                                return new SmartThingsService(client);
-            });
 
 
 

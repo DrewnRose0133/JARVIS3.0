@@ -27,6 +27,9 @@ namespace JARVIS.Config
         /// </summary>
         public MusicSettings Music { get; set; }
 
+        public List<TvConfig> SamsungTvs { get; set; }
+        public string AppName { get; set; }
+
     }
 
     /// <summary>
@@ -38,5 +41,11 @@ namespace JARVIS.Config
         /// Directory path containing music tracks
         /// </summary>
         public string MusicDirectory { get; set; }
+    }
+
+    public class TvConfig
+    {
+        public string Name { get; set; }
+        public string IpAddress { get; set; }
     }
 }

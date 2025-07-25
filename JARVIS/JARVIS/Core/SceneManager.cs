@@ -7,14 +7,14 @@ namespace JARVIS.Core
 {
     public class SceneManager
     {
-        private readonly SmartHomeController _smartHome;
+       // private readonly SmartHomeController _smartHome;
         private readonly string _defaultRoom;
 
-        public SceneManager(SmartHomeController smartHome, string defaultRoom = "livingroom")
-        {
-            _smartHome = smartHome;
-            _defaultRoom = defaultRoom;
-        }
+      //  public SceneManager(SmartHomeController smartHome, string defaultRoom = "livingroom")
+       // {
+         //   _smartHome = smartHome;
+          //  _defaultRoom = defaultRoom;
+       // }
 
         public async Task ExecuteSceneAsync(string sceneDefinition)
         {
@@ -27,8 +27,8 @@ namespace JARVIS.Core
 
                 switch (command)
                 {
-                    case "lights off": await _smartHome.TurnOffLightsAsync(room); break;
-                    case "lights on": await _smartHome.TurnOnLightsAsync(room); break;
+                   // case "lights off": await _smartHome.TurnOffLightsAsync(room); break;
+                  //  case "lights on": await _smartHome.TurnOnLightsAsync(room); break;
                     //case "fan on": await _smartHome.TurnOnFanAsync(room); break;
                    // case "fan off": await _smartHome.TurnOffFanAsync(room); break;
                    // case "volume low": await _smartHome.SetVolumeAsync(room, 20); break;

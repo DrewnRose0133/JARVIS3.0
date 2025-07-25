@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using JARVIS.UserSettings;
 using JARVIS.Core;
 using System.Speech.Synthesis;
+using JARVIS.Controllers;
 using Serilog;
 
 namespace JARVIS
@@ -36,6 +37,11 @@ namespace JARVIS
                         .AddJsonFile("samsungtv.json", optional: false, reloadOnChange: true);
                 })
                 .UseSerilog()
+                .ConfigureServices((ctx, services) =>
+                {
+                    services.AddJarvisServices(ctx.Configuration);
+                    services.AddHostedService<JarvisHostedService>();
+                })
                 .Build();
 
             var commandHandler = host.Services.GetRequiredService<CommandHandler>();
@@ -45,6 +51,16 @@ namespace JARVIS
             var sp = scope.ServiceProvider;
 
             var synthesizer = sp.GetRequiredService<SpeechSynthesizer>();
+
+            /** SMOKE TEST **/
+            // var ctrl = host.Services.GetRequiredService<SmartHomeController>();
+              //  Console.WriteLine(await ctrl.TurnOnLightsAsync("Living Room"));
+              //  Console.WriteLine(await ctrl.TurnOffLightsAsync("Living Room"));
+               //// Console.WriteLine(await ctrl.OpenGarageDoorAsync());
+              //  Console.WriteLine(await ctrl.CloseGarageDoorAsync());
+              //  return; 
+              
+             
 
             await host.RunAsync();
 

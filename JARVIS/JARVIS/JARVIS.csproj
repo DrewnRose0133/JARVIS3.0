@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <Folder Include="Devices\Implementations\" />
+    <Folder Include="Devices\OAuth\" />
     <Folder Include="Tools\" />
   </ItemGroup>
 
