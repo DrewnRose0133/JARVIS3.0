@@ -23,7 +23,9 @@ namespace JARVIS.Services
         public static IServiceCollection AddJarvisServices(this IServiceCollection services, IConfiguration config)
         {
             // Register core singleton services
-
+          //  var stSection = config.GetSection("SmartThings");
+           // var stClientId = stSection["ClientId"] ?? throw new InvalidOperationException("SmartThings:ClientId not configured.");
+          //  var stClientSecret = stSection["ClientSecret"] ?? throw new InvalidOperationException("SmartThings:ClientSecret not configured.");
             // Configure and validate LocalAI settings
             services
                 .AddOptions<LocalAISettings>()
@@ -76,20 +78,10 @@ namespace JARVIS.Services
                 return new DJModeManager(options, lightsSvc, beatDetector);
             });
 
-
-            services.Configure<SmartThingsSettings>(config.GetSection("SmartThings"));
-
-            services.AddHttpClient<ISmartThingsService, SmartThingsService>((sp, client) => {
-                var settings = sp.GetRequiredService<IOptions<SmartThingsSettings>>().Value;
-                client.BaseAddress = new Uri("https://api.smartthings.com/v1/");
-                client.DefaultRequestHeaders.Authorization =
-                    new AuthenticationHeaderValue("Bearer", settings.PersonalAccessToken);
-            });
-
             services.AddSingleton<PersonaController>();
             services.AddSingleton<ConversationEngine>();
             services.AddSingleton<AudioEngine>();
-            services.AddSingleton<SmartHomeController>();
+         //   services.AddSingleton<SmartHomeController>();
             services.AddSingleton<MemoryEngine>();
             services.AddSingleton<StatusReporter>();
             services.AddSingleton<VisualizerSocketServer>();
@@ -108,20 +100,38 @@ namespace JARVIS.Services
             services.AddSingleton<ILightsService, MqttLightsService>();
             services.AddSingleton<PromptSettings>();            
             services.AddSingleton<ConversationEngine>();
-            services.AddSingleton<IThermostatService, SmartThingsThermostatService>();
 
 
             services.AddSingleton<ICommandHandler, WeatherCommandHandler>();
             services.AddSingleton<ICommandHandler, LightsCommandHandler>();
-            services.AddSingleton<ICommandHandler, ElectronicsCommandHandler>();
             services.AddSingleton<ICommandHandler, MusicCommandHandler>();
             services.AddSingleton<ICommandHandler, StatusCommandHandler>();
             services.AddSingleton<ICommandHandler, SceneCommandHandler>();
-            
+
+
+            //services.AddSingleton(new SmartThingsOAuth(stClientId, stClientSecret));
+           // services.AddTransient<SmartThingsAuthHandler>();
+          //  services
+             //   .AddHttpClient<ISmartThingsService, SmartThingsService>(client =>
+              //  {
+               //     client.BaseAddress = new Uri("https://api.smartthings.com/v1/");
+              //  })
+               // .AddHttpMessageHandler<SmartThingsAuthHandler>();
+          //  services.AddSingleton<SmartHomeController>();
+
+            /**     services.AddSingleton<SmartThingsOAuth>();
+                 services.AddTransient<SmartThingsAuthHandler>();
+                 services
+                   .AddHttpClient<ISmartThingsService, SmartThingsService>(client =>
+                   {
+                       client.BaseAddress = new Uri("https://api.smartthings.com/v1/");
+                   })
+                   .AddHttpMessageHandler<SmartThingsAuthHandler>();
+
+                 services.AddSingleton<SmartHomeController>(); **/
 
             // Always the last ICommandHander
             services.AddSingleton<ICommandHandler, ChatFallbackHandler>();
-            
 
 
             services.AddSingleton<CommandHandler>();
@@ -133,30 +143,28 @@ namespace JARVIS.Services
             });
 
             services.AddSingleton<PersonaController>();
-            
 
 
 
-
-/**
-            services.AddSingleton<CommandHandler>(sp =>
-            {
-                var opts = sp.GetRequiredService<IOptions<AppSettings>>().Value;
-                return new CommandHandler(
-                    sp.GetRequiredService<PersonaController>(),
-                    sp.GetRequiredService<MemoryEngine>(),
-                    sp.GetRequiredService<WeatherController>(),
-                    sp.GetRequiredService<SceneManager>(),
-                    sp.GetRequiredService<SpeechSynthesizer>(),
-                    sp.GetRequiredService<VoiceStyleController>(),
-                    sp.GetRequiredService<StatusReporter>(),
-                    sp.GetRequiredService<DJModeManager>(),
-                    sp.GetRequiredService<UserPermissionManager>(),
-                    sp.GetRequiredService<SmartThingsService>(),
-                    opts.CityName
-                );
-            });
-**/
+            /**
+                        services.AddSingleton<CommandHandler>(sp =>
+                        {
+                            var opts = sp.GetRequiredService<IOptions<AppSettings>>().Value;
+                            return new CommandHandler(
+                                sp.GetRequiredService<PersonaController>(),
+                                sp.GetRequiredService<MemoryEngine>(),
+                                sp.GetRequiredService<WeatherController>(),
+                                sp.GetRequiredService<SceneManager>(),
+                                sp.GetRequiredService<SpeechSynthesizer>(),
+                                sp.GetRequiredService<VoiceStyleController>(),
+                                sp.GetRequiredService<StatusReporter>(),
+                                sp.GetRequiredService<DJModeManager>(),
+                                sp.GetRequiredService<UserPermissionManager>(),
+                                sp.GetRequiredService<SmartThingsService>(),
+                                opts.CityName
+                            );
+                        });
+            **/
             return services;
         }
     }

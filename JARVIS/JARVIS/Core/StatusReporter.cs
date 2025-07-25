@@ -9,12 +9,12 @@ namespace JARVIS.Core
 {
     public class StatusReporter
     {
-        private readonly SmartHomeController _smartHome;
+      //  private readonly SmartHomeController _smartHome;
 
-        public StatusReporter(SmartHomeController smartHome)
-        {
-            _smartHome = smartHome;
-        }
+      //  public StatusReporter(SmartHomeController smartHome)
+       // {
+          //  _smartHome = smartHome;
+        //}
 
         public async Task<string> GetSystemStatusAsync()
         {
